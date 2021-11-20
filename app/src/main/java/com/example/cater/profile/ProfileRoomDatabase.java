@@ -1,0 +1,72 @@
+package com.example.cater.profile;
+
+import android.content.Context;
+import android.os.AsyncTask;
+
+import androidx.annotation.NonNull;
+import androidx.room.Dao;
+import androidx.room.Database;
+import androidx.room.Room;
+import androidx.room.RoomDatabase;
+import androidx.sqlite.db.SupportSQLiteDatabase;
+
+@Database(entities = {Profile.class}, version = 1, exportSchema = false)
+public abstract class ProfileRoomDatabase extends RoomDatabase {
+    public abstract ProfileDao profileDao();
+
+    private static ProfileRoomDatabase INSTANCE;
+
+    public static ProfileRoomDatabase getDatabase(final Context context) {
+        if (INSTANCE == null) {
+            synchronized (ProfileRoomDatabase.class) {
+                if (INSTANCE == null) {
+                    // Create database here
+                    INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
+                            ProfileRoomDatabase.class, "profile_database")
+                            // Wipes and rebuilds instead of migrating
+                            // if no Migration object.
+                            // Migration is not part of this practical.
+                            .fallbackToDestructiveMigration()
+                            .addCallback(sRoomDatabaseCallback)
+                            .build();
+                }
+            }
+        }
+        return INSTANCE;
+    }
+
+    private static RoomDatabase.Callback sRoomDatabaseCallback =
+            new RoomDatabase.Callback(){
+
+                @Override
+                public void onOpen (@NonNull SupportSQLiteDatabase db){
+                    super.onOpen(db);
+                    new PopulateDbAsync(INSTANCE).execute();
+                }
+            };
+
+    /**
+     * Populate the database in the background.
+     */
+    private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
+
+        private final ProfileDao mDao;
+        String[] names = {"Jason", "Monica", "Cindy"};
+
+        PopulateDbAsync(ProfileRoomDatabase db) {
+            mDao = db.profileDao();
+        }
+
+        @Override
+        protected Void doInBackground(final Void... params) {
+            // If we have no profiles, then create the initial list of profiles
+            if (mDao.getAnyProfile().length < 1) {
+                for (int i = 0; i <= names.length - 1; i++) {
+                    Profile profile = new Profile.Builder(i, names[i]).builder();
+                    mDao.insert(profile);
+                }
+            }
+            return null;
+        }
+    }
+}
