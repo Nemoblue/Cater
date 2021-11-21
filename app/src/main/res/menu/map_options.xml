@@ -3,13 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item android:id="@+id/normal_map"
         android:title="@string/normal_map"
+        android:icon="@drawable/ic_map_normal"
         app:showAsAction="ifRoom"/>
     <item android:id="@+id/hybrid_map"
         android:title="@string/hybrid_map"
         app:showAsAction="never"/>
     <item android:id="@+id/satellite_map"
         android:title="@string/satellite_map"
-        app:showAsAction="never"/>
+        android:icon="@drawable/ic_map_satellite"
+        app:showAsAction="ifRoom"/>
     <item android:id="@+id/terrain_map"
         android:title="@string/terrain_map"
         app:showAsAction="never"/>

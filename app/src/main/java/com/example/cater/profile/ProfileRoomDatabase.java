@@ -2,6 +2,7 @@ package com.example.cater.profile;
 
 import android.content.Context;
 import android.os.AsyncTask;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.room.Dao;
@@ -9,6 +10,8 @@ import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
+
+import java.util.Random;
 
 @Database(entities = {Profile.class}, version = 1, exportSchema = false)
 public abstract class ProfileRoomDatabase extends RoomDatabase {
@@ -46,6 +49,7 @@ public abstract class ProfileRoomDatabase extends RoomDatabase {
             };
 
     /**
+     * TODO: This function only for test cases. Initialization of the dababase need futher work.
      * Populate the database in the background.
      */
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
@@ -62,7 +66,10 @@ public abstract class ProfileRoomDatabase extends RoomDatabase {
             // If we have no profiles, then create the initial list of profiles
             if (mDao.getAnyProfile().length < 1) {
                 for (int i = 0; i <= names.length - 1; i++) {
-                    Profile profile = new Profile.Builder(i, names[i]).builder();
+                    Profile profile = new Profile
+                            .Builder(i, names[i])
+                            .position((22.33653 + Math.random()*0.001), (114.26363 - Math.random()*0.001))
+                            .builder();
                     mDao.insert(profile);
                 }
             }
