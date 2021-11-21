@@ -10,14 +10,20 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProviders;
 
 import com.example.cater.R;
 import com.example.cater.databinding.FragmentMapBinding;
+import com.example.cater.profile.Profile;
+import com.example.cater.profile.ProfileViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
@@ -29,12 +35,16 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PointOfInterest;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private GoogleMap mMap;
+    private int mType; // 1-4 from normal map to terrain map
+    private ProfileViewModel mProfileViewModel;
+    private String option_message = "Already in this type.";
     private FragmentMapBinding binding;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
 
@@ -56,11 +66,19 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
+        mType = 1;
 
         // Set the initial position and zoom level
         float zoom = 18;
         LatLng hkust = new LatLng(22.33653, 114.26363);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hkust, zoom));
+        mProfileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
+        mProfileViewModel.getAllProfiles().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
+            @Override
+            public void onChanged(@Nullable final List<Profile> profiles) {
+                setProfileMarker(profiles);
+            }
+        });
 
         setMapLongClick(mMap);
         setPoiClick(mMap);
@@ -109,6 +127,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         }
     }
 
+    /** TODO: This function has not yet been completed. Need further development.
+     *
+     */
+    private void setProfileMarker(List<Profile> profiles) {
+        if (profiles != null) {
+            int size = profiles.size();
+            for (int i = 0; i < size; i++) {
+                Profile current = profiles.get(i);
+                String current_name = current.getuName();
+                LatLng current_latLng = new LatLng(current.getPosition()[0], current.getPosition()[1]);
+                String current_snippet = String.format(Locale.getDefault(),
+                        "Lat: %1$.5f, Long: %2$.5f",
+                        current_latLng.latitude,
+                        current_latLng.longitude);
+                mMap.addMarker(new MarkerOptions()
+                        .position(current_latLng)
+                        .title(current_name)
+                        .snippet(current_snippet));
+            }
+        }
+    }
+
     @Override
     public void onRequestPermissionsResult(int requestCode,
                                            @NonNull String[] permissions,
@@ -139,16 +179,40 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         // Change the map type based on the user's selection.
         switch (item.getItemId()) {
             case R.id.normal_map:
+                if (mType == 1) {
+                    Toast.makeText(requireContext(), option_message,
+                            Toast.LENGTH_SHORT).show();
+                    return true;
+                }
                 mMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+                mType = 1;
                 return true;
             case R.id.hybrid_map:
+                if (mType == 2) {
+                    Toast.makeText(requireContext(), option_message,
+                            Toast.LENGTH_SHORT).show();
+                    return true;
+                }
                 mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
+                mType = 2;
                 return true;
             case R.id.satellite_map:
+                if (mType == 3) {
+                    Toast.makeText(requireContext(), option_message,
+                            Toast.LENGTH_SHORT).show();
+                    return true;
+                }
                 mMap.setMapType(GoogleMap.MAP_TYPE_SATELLITE);
+                mType = 3;
                 return true;
             case R.id.terrain_map:
+                if (mType == 4) {
+                    Toast.makeText(requireContext(), option_message,
+                            Toast.LENGTH_SHORT).show();
+                    return true;
+                }
                 mMap.setMapType(GoogleMap.MAP_TYPE_TERRAIN);
+                mType = 4;
                 return true;
             default:
                 return super.onOptionsItemSelected(item);
