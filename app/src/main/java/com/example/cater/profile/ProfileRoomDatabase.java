@@ -39,23 +39,24 @@ public abstract class ProfileRoomDatabase extends RoomDatabase {
     }
 
     private static RoomDatabase.Callback sRoomDatabaseCallback =
-            new RoomDatabase.Callback(){
+            new RoomDatabase.Callback() {
 
                 @Override
-                public void onOpen (@NonNull SupportSQLiteDatabase db){
+                public void onOpen(@NonNull SupportSQLiteDatabase db) {
                     super.onOpen(db);
                     new PopulateDbAsync(INSTANCE).execute();
                 }
             };
 
     /**
-     * TODO: This function only for test cases. Initialization of the dababase need futher work.
+     * TODO: This function only for test cases. Initialization of the database need further work.
      * Populate the database in the background.
      */
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
         private final ProfileDao mDao;
-        String[] names = {"Jason", "Monica", "Cindy"};
+        String[] names = {"Jason", "Monica", "Cindy", "David", "Eric", "Frank"};
+
 
         PopulateDbAsync(ProfileRoomDatabase db) {
             mDao = db.profileDao();
@@ -65,10 +66,11 @@ public abstract class ProfileRoomDatabase extends RoomDatabase {
         protected Void doInBackground(final Void... params) {
             // If we have no profiles, then create the initial list of profiles
             if (mDao.getAnyProfile().length < 1) {
-                for (int i = 0; i <= names.length - 1; i++) {
+                for (int i = 0; i < names.length; i++) {
                     Profile profile = new Profile
                             .Builder(i, names[i])
-                            .position((22.33653 + Math.random()*0.001), (114.26363 - Math.random()*0.001))
+                            .position((22.33653 + (Math.random() * 2 - 1) * 0.001)
+                                    , (114.26363 + (Math.random() * 2 - 1) * 0.001))
                             .builder();
                     mDao.insert(profile);
                 }

@@ -14,4 +14,8 @@
     <string name="satellite_map">Satellite</string>
     <string name="terrain_map">Terrain</string>
     <string name="dropped_pin">Dropped Pin</string>
+    <string name="button_refresh">Refresh</string>
+    <string name="marker_refresh">Search Nearby Users</string>
+    <string name="marker_clear">Clear All Markers</string>
+    <string name="map_type_notify">Already in this type.</string>
 </resources>
