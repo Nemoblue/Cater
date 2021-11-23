@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/drawable-anydpi/ic_cancel.xml" value="0.2942708333333333" />
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/drawable-anydpi/ic_map_normal.xml" value="0.2942708333333333" />
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/drawable-anydpi/ic_menu_home.xml" value="0.2942708333333333" />
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/drawable/ic_menu_camera.xml" value="0.2942708333333333" />
@@ -12,6 +13,7 @@
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/layout/activity_maps.xml" value="0.278125" />
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/layout/app_bar_main.xml" value="0.278125" />
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/layout/content_main.xml" value="0.278125" />
+        <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/layout/fragment_guest.xml" value="0.278125" />
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/layout/fragment_home.xml" value="0.278125" />
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/layout/fragment_map.xml" value="0.278125" />
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/layout/fragment_me.xml" value="0.278125" />

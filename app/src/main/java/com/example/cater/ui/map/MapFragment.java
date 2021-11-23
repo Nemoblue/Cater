@@ -5,6 +5,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.media.Image;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +21,8 @@ import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -44,20 +47,34 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.Random;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
+    // Variables for the Map fragment
     private GoogleMap mMap;
     private int mType; // 1-4 from normal map to terrain map
-    private int mSampleSize = 5;
-    ArrayList<Marker> mSampleMarker = new ArrayList<Marker>();
+    private static final int REQUEST_LOCATION_PERMISSION = 1;
+
+    // Variables for the sample fragment
+    private final int mSampleSize = 5;
     private ProfileViewModel mProfileViewModel;
     private List<Profile> mProfiles;
+    private List<Marker> mSampleMarker = new ArrayList<Marker>();
+    private List<Integer> sampleList = new ArrayList<Integer>();
+
+    // Variables for the guest fragment
+    private boolean isFragmentDisplayed = false;
     private FragmentMapBinding binding;
-    private static final int REQUEST_LOCATION_PERMISSION = 1;
+    static final String STATE_FRAGMENT = "state_of_fragment";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            isFragmentDisplayed =
+                    savedInstanceState.getBoolean(STATE_FRAGMENT);
+        }
 
         binding = FragmentMapBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
@@ -66,7 +83,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         binding.buttonRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                for(int i=0; i < mSampleMarker.size(); i++)
+                for (int i = 0; i < mSampleMarker.size(); i++)
                     mSampleMarker.get(i).remove();
                 mSampleMarker.clear();
 
@@ -101,10 +118,14 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         float zoom = 18;
         LatLng hkust = new LatLng(22.33653, 114.26363);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hkust, zoom));
-        mProfileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
-        mProfileViewModel.getAllProfiles().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
+        assert getParentFragment() != null;
+        mProfileViewModel = ViewModelProviders.of(getParentFragment()).get(ProfileViewModel.class);
+        mProfileViewModel.getActiveProfiles().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
             @Override
             public void onChanged(@Nullable final List<Profile> profiles) {
+                for (int i = 0; i < mSampleMarker.size(); i++)
+                    mSampleMarker.get(i).remove();
+                mSampleMarker.clear();
                 setProfileMarker(profiles);
             }
         });
@@ -112,6 +133,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         setMapLongClick(mMap);
         setPoiClick(mMap);
         enableMyLocation();
+        setInfoWindowClickToProfile(mMap);
     }
 
     private void setMapLongClick(final GoogleMap map) {
@@ -162,25 +184,25 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             Random rand = new Random();
             int profile_size = mProfiles.size();
             int sample_size = Math.min(mSampleSize, profile_size);
-            ArrayList<Integer> list = new ArrayList<Integer>();
 
-            while(list.size() < sample_size) {
+
+            while (sampleList.size() < sample_size) {
                 int sample = rand.nextInt(profile_size);
                 boolean flag = true;
-                for (int i=0; i < list.size(); i++) {
-                    if (sample == list.get(i))
+                for (int i = 0; i < sampleList.size(); i++) {
+                    if (sample == sampleList.get(i))
                         flag = false;
                 }
                 if (flag)
-                    list.add(sample);
+                    sampleList.add(sample);
             }
 
             for (int j = 0; j < sample_size; j++) {
-                Profile current = mProfiles.get(list.get(j));
-                String current_name = current.getuName();
+                Profile current = mProfiles.get(sampleList.get(j));
+                String current_name = String.format(Locale.getDefault(), "%s(%d)",
+                        current.getuName(), j);
                 LatLng current_latLng = new LatLng(current.getPosition()[0], current.getPosition()[1]);
-                String current_snippet = String.format(Locale.getDefault(),
-                        "Lat: %1$.5f, Long: %2$.5f",
+                String current_snippet = String.format(Locale.getDefault(), "Lat: %1$.5f, Long: %2$.5f",
                         current_latLng.latitude,
                         current_latLng.longitude);
                 Marker marker = Objects.requireNonNull(mMap.addMarker(new MarkerOptions()
@@ -191,27 +213,60 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                 (BitmapDescriptorFactory.HUE_CYAN))
                 ));
                 marker.setTag("Profile");
-                marker.showInfoWindow();
                 mSampleMarker.add(marker);
             }
         }
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode,
-                                           @NonNull String[] permissions,
-                                           @NonNull int[] grantResults) {
-        // Check if location permissions are granted and if so enable the
-        // location data layer.
-        switch (requestCode) {
-            case REQUEST_LOCATION_PERMISSION:
-                if (grantResults.length > 0
-                        && grantResults[0]
-                        == PackageManager.PERMISSION_GRANTED) {
-                    enableMyLocation();
-                    break;
+    private void setInfoWindowClickToProfile(GoogleMap map) {
+        map.setOnInfoWindowClickListener(
+                new GoogleMap.OnInfoWindowClickListener() {
+                    @Override
+                    public void onInfoWindowClick(Marker marker) {
+                        if (marker.getTag() == "Profile") {
+                            displayFragment(marker.getTitle());
+                        }
+                    }
                 }
+        );
+    }
+
+    public void displayFragment(String title) {
+        if (isFragmentDisplayed)
+            removeFragment();
+
+        int id = 0;
+        Pattern pattern = Pattern.compile(getString(R.string.map_regular_pattern));
+        Matcher matcher = pattern.matcher(title);
+        while (matcher.find())
+            id = Integer.parseInt(matcher.group());
+        Profile profile = mProfiles.get(sampleList.get(id));
+
+        GuestFragment guestFragment = GuestFragment.newInstance(profile);
+        // Get the FragmentManager and start a transaction.
+        FragmentManager fragmentManager = getChildFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager
+                .beginTransaction();
+        // Add the SimpleFragment.
+        fragmentTransaction.add(R.id.fragment_guest_container,
+                guestFragment).addToBackStack(null).commit();
+        // Set boolean flag to indicate fragment is open.
+        isFragmentDisplayed = true;
+    }
+
+    public void removeFragment() {
+        // Get the FragmentManager.
+        FragmentManager fragmentManager = getChildFragmentManager();
+        // Check to see if the fragment is already showing.
+        GuestFragment guestFragment = (GuestFragment) fragmentManager
+                .findFragmentById(R.id.fragment_guest_container);
+        if (guestFragment != null) {
+            // Create and commit the transaction to remove the fragment.
+            FragmentTransaction fragmentTransaction =
+                    fragmentManager.beginTransaction();
+            fragmentTransaction.remove(guestFragment).commit();
         }
+        isFragmentDisplayed = false;
     }
 
     @Override
@@ -265,6 +320,28 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             default:
                 return super.onOptionsItemSelected(item);
         }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        // Check if location permissions are granted and if so enable the
+        // location data layer.
+        switch (requestCode) {
+            case REQUEST_LOCATION_PERMISSION:
+                if (grantResults.length > 0
+                        && grantResults[0]
+                        == PackageManager.PERMISSION_GRANTED) {
+                    enableMyLocation();
+                    break;
+                }
+        }
+    }
+
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putBoolean(STATE_FRAGMENT, isFragmentDisplayed);
+        super.onSaveInstanceState(savedInstanceState);
     }
 
     @Override
