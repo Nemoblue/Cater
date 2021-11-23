@@ -5,8 +5,10 @@ import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
+import java.io.Serializable;
+
 @Entity(tableName = "profile_table")
-public class Profile {
+public class Profile implements Serializable {
     @PrimaryKey
     @NonNull
     @ColumnInfo(name = "uid")
@@ -26,10 +28,10 @@ public class Profile {
     protected double uLatitude;
     @ColumnInfo(name = "longitude")
     protected double uLongitude;
+    @ColumnInfo(name = "active")
+    protected boolean uActive;
 
-    public Profile(@NonNull int uid) {
-        this.uid = 0;
-    }
+    public Profile(@NonNull int uid) { this.uid = uid; }
 
     public static class Builder {
         private int uid;
@@ -39,6 +41,7 @@ public class Profile {
         private String uDescription = null;
         private String uTag = null;
         private double[] uPosition = {-1, -1};
+        private boolean uActive = true;
 
         public Builder(@NonNull int uid, @NonNull String name) {
             this.uid = uid;
@@ -71,6 +74,11 @@ public class Profile {
             return this;
         }
 
+        public Builder active(boolean active) {
+            uActive = active;
+            return this;
+        }
+
         public Profile builder() {
             return new Profile(this);
         }
@@ -85,6 +93,7 @@ public class Profile {
         this.uTag = builder.uTag;
         this.uLatitude = builder.uPosition[0];
         this.uLongitude = builder.uPosition[1];
+        this.uActive = builder.uActive;
     }
 
     public int getUid() {return this.uid;}
@@ -94,4 +103,5 @@ public class Profile {
     public String getDescription() {return this.uDescription;}
     public String getTag() {return this.uTag;}
     public double[] getPosition() { return new double[]{this.uLatitude, this.uLongitude};}
+    public boolean isuActive() {return this.uActive;}
 }

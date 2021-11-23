@@ -11,9 +11,10 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
+import java.util.Locale;
 import java.util.Random;
 
-@Database(entities = {Profile.class}, version = 1, exportSchema = false)
+@Database(entities = {Profile.class}, version = 2, exportSchema = false)
 public abstract class ProfileRoomDatabase extends RoomDatabase {
     public abstract ProfileDao profileDao();
 
@@ -64,13 +65,18 @@ public abstract class ProfileRoomDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(final Void... params) {
+            // TODO: IF need to delete all the database, use the following line.
+            //mDao.deleteAll();
             // If we have no profiles, then create the initial list of profiles
             if (mDao.getAnyProfile().length < 1) {
                 for (int i = 0; i < names.length; i++) {
+                    String description = String.format(Locale.getDefault(),
+                            "This is %s. Nice to see you!", names[i]);
                     Profile profile = new Profile
                             .Builder(i, names[i])
                             .position((22.33653 + (Math.random() * 2 - 1) * 0.001)
                                     , (114.26363 + (Math.random() * 2 - 1) * 0.001))
+                            .description(description)
                             .builder();
                     mDao.insert(profile);
                 }
