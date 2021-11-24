@@ -24,7 +24,7 @@ public interface ProfileDao {
     @Query("SELECT * FROM profile_table ORDER BY uid ASC")
     LiveData<List<Profile>> getAllProfiles();
 
-    @Query("SELECT * FROM profile_table WHERE active = 1 LIMIT 20")
+    @Query("SELECT * FROM profile_table WHERE active = 1 ORDER BY RANDOM() LIMIT 20")
     LiveData<List<Profile>> getActiveProfiles();
 
     @Query("SELECT * FROM profile_table WHERE uid = :uid")

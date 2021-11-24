@@ -62,7 +62,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     private ProfileViewModel mProfileViewModel;
     private List<Profile> mProfiles;
     private List<Marker> mSampleMarker = new ArrayList<Marker>();
-    private List<Integer> sampleList = new ArrayList<Integer>();
+    private List<Integer> mSampleList = new ArrayList<Integer>();
 
     // Variables for the guest fragment
     private boolean isFragmentDisplayed = false;
@@ -182,6 +182,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mProfiles = profiles;
         if (mProfiles != null) {
             Random rand = new Random();
+            List<Integer> sampleList = new ArrayList<Integer>();
             int profile_size = mProfiles.size();
             int sample_size = Math.min(mSampleSize, profile_size);
 
@@ -196,6 +197,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 if (flag)
                     sampleList.add(sample);
             }
+            mSampleList = sampleList;
 
             for (int j = 0; j < sample_size; j++) {
                 Profile current = mProfiles.get(sampleList.get(j));
@@ -213,6 +215,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                 (BitmapDescriptorFactory.HUE_CYAN))
                 ));
                 marker.setTag("Profile");
+                marker.showInfoWindow();
                 mSampleMarker.add(marker);
             }
         }
@@ -240,7 +243,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         Matcher matcher = pattern.matcher(title);
         while (matcher.find())
             id = Integer.parseInt(matcher.group());
-        Profile profile = mProfiles.get(sampleList.get(id));
+        Profile profile = mProfiles.get(mSampleList.get(id));
 
         GuestFragment guestFragment = GuestFragment.newInstance(profile);
         // Get the FragmentManager and start a transaction.
