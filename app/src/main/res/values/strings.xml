@@ -28,5 +28,6 @@
     <string name="button_remove">button remove</string>
     <string name="default_name">Default_Name</string>
     <string name="default_description">Default_Description</string>
+    <string name="button_chat">Chat</string>
 
 </resources>
