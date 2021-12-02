@@ -16,18 +16,22 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:alpha="0.4"
+        android:contentDescription="@string/button_remove"
         android:minHeight="48dp"
         android:src="@drawable/ic_cancel"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:contentDescription="@string/button_remove" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
         android:id="@+id/map_guest_photo"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="@string/nav_header_desc"
+        android:adjustViewBounds="true"
+        android:contentDescription="@string/profile_photo"
+        android:maxWidth="@dimen/guest_profile_spacing"
+        android:maxHeight="@dimen/guest_profile_spacing"
         android:paddingTop="@dimen/nav_header_vertical_spacing"
+        android:scaleType="centerInside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@mipmap/ic_launcher_round" />
@@ -48,7 +52,7 @@
         android:layout_height="wrap_content"
         android:text="@string/nav_header_subtitle"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/map_guest_chat"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/map_guest_name" />
 

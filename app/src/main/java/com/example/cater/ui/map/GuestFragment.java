@@ -1,5 +1,6 @@
 package com.example.cater.ui.map;
 
+import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,6 +13,7 @@ import android.widget.Toast;
 
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.example.cater.R;
 import com.example.cater.profile.Profile;
 
@@ -64,10 +66,21 @@ public class GuestFragment extends Fragment {
             mProfile = (Profile) getArguments().getSerializable(PROFILE);
 
             if (mProfile != null) {
-                final ImageView imageView = rootView.findViewById(R.id.map_guest_photo);
+                final ImageView guestPhoto = rootView.findViewById(R.id.map_guest_photo);
                 final TextView guestName = rootView.findViewById(R.id.map_guest_name);
                 final TextView guestDescription = rootView.findViewById(R.id.map_guest_description);
 
+                if (mProfile.getPhoto() != null) {
+                    String photoPath = mProfile.getPhoto();
+                    if(photoPath.startsWith("default")) {
+                        int index = Integer.parseInt(photoPath.substring(photoPath.length() - 1));
+                        TypedArray profilePhotoResources =
+                                getResources().obtainTypedArray(R.array.profile_photos);
+                        Glide.with(getContext()).load(profilePhotoResources.getResourceId(index, 0)).into(guestPhoto);
+
+                        profilePhotoResources.recycle();
+                    }
+                }
                 if (mProfile.getuName() == null)
                     guestName.setText(R.string.default_name);
                 else
