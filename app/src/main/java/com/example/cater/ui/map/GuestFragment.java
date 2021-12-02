@@ -1,21 +1,19 @@
 package com.example.cater.ui.map;
 
-import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.fragment.app.Fragment;
+
+import com.bumptech.glide.Glide;
 import com.example.cater.R;
 import com.example.cater.profile.Profile;
 
@@ -47,6 +45,7 @@ public class GuestFragment extends Fragment {
         final View rootView =
                 inflater.inflate(R.layout.fragment_guest, container, false);
         final ImageButton imageButton = rootView.findViewById(R.id.guest_image_button);
+        final Button chatButton = rootView.findViewById(R.id.map_guest_chat);
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -54,25 +53,43 @@ public class GuestFragment extends Fragment {
                 ((MapFragment) getParentFragment()).removeFragment();
             }
         });
+        chatButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(requireContext(), "Not yet complemented.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
 
         assert getArguments() != null;
         if (getArguments().containsKey(PROFILE)) {
             mProfile = (Profile) getArguments().getSerializable(PROFILE);
 
-            if(mProfile != null) {
-            final ImageView imageView = rootView.findViewById(R.id.map_guest_photo);
-            final TextView guestName = rootView.findViewById(R.id.map_guest_name);
-            final TextView guestDescription = rootView.findViewById(R.id.map_guest_description);
+            if (mProfile != null) {
+                final ImageView guestPhoto = rootView.findViewById(R.id.map_guest_photo);
+                final TextView guestName = rootView.findViewById(R.id.map_guest_name);
+                final TextView guestDescription = rootView.findViewById(R.id.map_guest_description);
 
-            if (mProfile.getuName() == null)
-                guestName.setText(R.string.default_name);
-            else
-                guestName.setText(mProfile.getuName());
+                if (mProfile.getPhoto() != null) {
+                    String photoPath = mProfile.getPhoto();
+                    if(photoPath.startsWith("default")) {
+                        int index = Integer.parseInt(photoPath.substring(photoPath.length() - 1));
+                        TypedArray profilePhotoResources =
+                                getResources().obtainTypedArray(R.array.profile_photos);
+                        Glide.with(getContext()).load(profilePhotoResources.getResourceId(index, 0)).into(guestPhoto);
 
-            if (mProfile.getDescription() == null)
-                guestDescription.setText(R.string.default_description);
-            else
-                guestDescription.setText(mProfile.getDescription());
+                        profilePhotoResources.recycle();
+                    }
+                }
+                if (mProfile.getuName() == null)
+                    guestName.setText(R.string.default_name);
+                else
+                    guestName.setText(mProfile.getuName());
+
+                if (mProfile.getDescription() == null)
+                    guestDescription.setText(R.string.default_description);
+                else
+                    guestDescription.setText(mProfile.getDescription());
             }
         }
 

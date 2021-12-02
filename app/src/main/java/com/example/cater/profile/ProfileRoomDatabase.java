@@ -72,8 +72,11 @@ public abstract class ProfileRoomDatabase extends RoomDatabase {
                 for (int i = 0; i < names.length; i++) {
                     String description = String.format(Locale.getDefault(),
                             "This is %s. Nice to see you!", names[i]);
+                    String photo = String.format(Locale.getDefault(),
+                            "default_%d", i+1);
                     Profile profile = new Profile
                             .Builder(i, names[i])
+                            .photo(photo)
                             .position((22.33653 + (Math.random() * 2 - 1) * 0.001)
                                     , (114.26363 + (Math.random() * 2 - 1) * 0.001))
                             .description(description)

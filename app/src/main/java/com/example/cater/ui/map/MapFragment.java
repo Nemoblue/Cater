@@ -2,18 +2,13 @@ package com.example.cater.ui.map;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
-import android.graphics.Bitmap;
-import android.media.Image;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -33,9 +28,7 @@ import com.example.cater.profile.ProfileViewModel;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.StreetViewPanoramaOptions;
 import com.google.android.gms.maps.SupportMapFragment;
-import com.google.android.gms.maps.SupportStreetViewPanoramaFragment;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -55,14 +48,16 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     // Variables for the Map fragment
     private GoogleMap mMap;
     private int mType; // 1-4 from normal map to terrain map
+    // Set the initial position and zoom level
+    float zoom = 18;
+    LatLng hkust = new LatLng(22.33653, 114.26363);
     private static final int REQUEST_LOCATION_PERMISSION = 1;
 
     // Variables for the sample fragment
     private final int mSampleSize = 5;
-    private ProfileViewModel mProfileViewModel;
     private List<Profile> mProfiles;
-    private List<Marker> mSampleMarker = new ArrayList<Marker>();
-    private List<Integer> mSampleList = new ArrayList<Integer>();
+    private final List<Marker> mSampleMarker = new ArrayList<>();
+    private List<Integer> mSampleList = new ArrayList<>();
 
     // Variables for the guest fragment
     private boolean isFragmentDisplayed = false;
@@ -88,6 +83,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                 mSampleMarker.clear();
 
                 setProfileMarker(mProfiles);
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hkust, zoom));
                 Toast.makeText(requireContext(), R.string.marker_refresh,
                         Toast.LENGTH_SHORT).show();
             }
@@ -113,13 +109,10 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     public void onMapReady(@NonNull GoogleMap googleMap) {
         mMap = googleMap;
         mType = 1;
-
-        // Set the initial position and zoom level
-        float zoom = 18;
-        LatLng hkust = new LatLng(22.33653, 114.26363);
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hkust, zoom));
+
         assert getParentFragment() != null;
-        mProfileViewModel = ViewModelProviders.of(getParentFragment()).get(ProfileViewModel.class);
+        ProfileViewModel mProfileViewModel = ViewModelProviders.of(getParentFragment()).get(ProfileViewModel.class);
         mProfileViewModel.getActiveProfiles().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
             @Override
             public void onChanged(@Nullable final List<Profile> profiles) {
@@ -182,7 +175,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mProfiles = profiles;
         if (mProfiles != null) {
             Random rand = new Random();
-            List<Integer> sampleList = new ArrayList<Integer>();
+            List<Integer> sampleList = new ArrayList<>();
             int profile_size = mProfiles.size();
             int sample_size = Math.min(mSampleSize, profile_size);
 
@@ -225,7 +218,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         map.setOnInfoWindowClickListener(
                 new GoogleMap.OnInfoWindowClickListener() {
                     @Override
-                    public void onInfoWindowClick(Marker marker) {
+                    public void onInfoWindowClick(@NonNull Marker marker) {
                         if (marker.getTag() == "Profile") {
                             displayFragment(marker.getTitle());
                         }
@@ -331,14 +324,12 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
                                            @NonNull int[] grantResults) {
         // Check if location permissions are granted and if so enable the
         // location data layer.
-        switch (requestCode) {
-            case REQUEST_LOCATION_PERMISSION:
-                if (grantResults.length > 0
-                        && grantResults[0]
-                        == PackageManager.PERMISSION_GRANTED) {
-                    enableMyLocation();
-                    break;
-                }
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.length > 0
+                    && grantResults[0]
+                    == PackageManager.PERMISSION_GRANTED) {
+                enableMyLocation();
+            }
         }
     }
 

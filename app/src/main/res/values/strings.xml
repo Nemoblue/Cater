@@ -28,5 +28,18 @@
     <string name="button_remove">button remove</string>
     <string name="default_name">Default_Name</string>
     <string name="default_description">Default_Description</string>
+    <string name="button_chat">Chat</string>
+    <string name="profile_photo">Profile photo</string>
+
+    <array name="profile_photos">
+        <item>@drawable/default_1</item>
+        <item>@drawable/default_2</item>
+        <item>@drawable/default_3</item>
+        <item>@drawable/default_4</item>
+        <item>@drawable/default_5</item>
+        <item>@drawable/default_6</item>
+        <item>@drawable/default_7</item>
+        <item>@drawable/default_8</item>
+    </array>
 
 </resources>
