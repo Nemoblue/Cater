@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/bg4"
+    tools:context=".ui.home.BookingActivity">
+
+<!--    <ScrollView-->
+<!--        xmlns:android="http://schemas.android.com/apk/res/android"-->
+<!--        xmlns:tools="http://schemas.android.com/tools"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="match_parent"-->
+<!--        android:id="@+id/mScrollView"-->
+<!--        android:orientation="vertical">-->
+
+        <LinearLayout android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:background="@color/bg2">
+
+                <LinearLayout android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="15dp">
+
+                    <ImageView android:layout_width="40dp"
+                        android:layout_height="20dp"
+                        android:visibility="invisible"/>
+
+                    <TextView android:layout_width="220dp"
+                        android:layout_height="wrap_content"
+                        android:text="Date"
+                        android:textColor="@color/white"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="15dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp">
+
+                    <com.makeramen.roundedimageview.RoundedImageView
+                        android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        app:riv_oval="true"
+                        app:riv_corner_radius="20dp"
+                        android:layout_gravity="center_vertical"
+                        android:src="@mipmap/icon_date"/>
+
+                    <TextView android:layout_width="220dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/mBtnDate"
+                        android:text="Today"
+                        android:textColor="@color/white"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"
+                        android:layout_marginLeft="15dp"
+                        android:background="@color/bg"/>
+
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="15dp">
+
+                    <ImageView android:layout_width="40dp"
+                        android:layout_height="20dp"
+                        android:visibility="invisible"/>
+
+                    <TextView android:layout_width="220dp"
+                        android:layout_height="wrap_content"
+                        android:text="Time"
+                        android:textColor="@color/white"
+                        android:gravity="center_vertical"
+                        android:layout_marginLeft="15dp"/>
+
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp">
+
+                    <ImageView android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@mipmap/sort_icon_kao"/>
+
+                    <TextView android:layout_width="220dp"
+                        android:layout_height="40dp"
+                        android:id="@+id/mBtnFromTime"
+                        android:text="From now(12:00)"
+                        android:layout_marginLeft="15dp"
+                        android:textColor="@color/white"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="10dp"
+                        android:background="@color/bg"/>
+
+                </LinearLayout>
+
+                <LinearLayout android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp">
+
+                    <ImageView android:layout_width="40dp"
+                        android:layout_height="40dp"
+                        android:visibility="invisible"/>
+
+                    <TextView android:layout_width="200dp"
+                        android:layout_height="40dp"
+                        android:text="SEARCH"
+                        android:textSize="20sp"
+                        android:textStyle="bold"
+                        android:textColor="@color/white"
+                        android:gravity="end|center_vertical"/>
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+            <LinearLayout android:layout_width="match_parent"
+                android:layout_height="80dp"
+                android:orientation="vertical"
+                android:background="@color/bg3">
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/mRvResult"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="15dp" />
+
+        </LinearLayout>
+
+<!--    </ScrollView>-->
+
+</androidx.constraintlayout.widget.ConstraintLayout>
