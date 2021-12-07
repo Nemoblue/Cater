@@ -8,6 +8,7 @@ import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -21,6 +22,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.example.cater.R;
 import com.example.cater.databinding.FragmentMeBinding;
+import com.example.cater.ui.login.LoginActivity;
 import com.example.cater.ui.map.MapFragment;
 
 import java.io.InputStream;
@@ -31,6 +33,7 @@ public class MeFragment extends Fragment {
     private MeViewModel meViewModel;
     private FragmentMeBinding binding;
     private ImageView userIcon;
+    private Button login;
     public static final int PICK_IMAGE = 1;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -58,11 +61,12 @@ public class MeFragment extends Fragment {
                 startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
             }
         });
-        final TextView userName = root.findViewById(R.id.user_name);
-        userName.setOnClickListener(new View.OnClickListener() {
+        login = root.findViewById(R.id.button);
+        login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                userName.setText("TEST");
+              Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivity(intent);
             }
         });
         return root;
