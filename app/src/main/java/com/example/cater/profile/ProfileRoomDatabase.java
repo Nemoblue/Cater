@@ -29,7 +29,6 @@ public abstract class ProfileRoomDatabase extends RoomDatabase {
                             ProfileRoomDatabase.class, "profile_database")
                             // Wipes and rebuilds instead of migrating
                             // if no Migration object.
-                            // Migration is not part of this practical.
                             .fallbackToDestructiveMigration()
                             .addCallback(sRoomDatabaseCallback)
                             .build();
