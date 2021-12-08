@@ -30,6 +30,9 @@ public class Profile implements Serializable {
     protected double uLongitude;
     @ColumnInfo(name = "active")
     protected boolean uActive;
+    //to be upgraded
+    @ColumnInfo(name = "password")
+    protected String uPassword;
 
     public Profile(@NonNull int uid) { this.uid = uid; }
 
@@ -42,6 +45,7 @@ public class Profile implements Serializable {
         private String uTag = null;
         private double[] uPosition = {-1, -1};
         private boolean uActive = true;
+        private String uPassword = "aaa"; //todo please remember to modify the constructor
 
         public Builder(@NonNull int uid, @NonNull String name) {
             this.uid = uid;
@@ -78,6 +82,10 @@ public class Profile implements Serializable {
             uActive = active;
             return this;
         }
+        public Builder password(String password){
+            uPassword = password;
+            return this;
+        }
 
         public Profile builder() {
             return new Profile(this);
@@ -94,6 +102,7 @@ public class Profile implements Serializable {
         this.uLatitude = builder.uPosition[0];
         this.uLongitude = builder.uPosition[1];
         this.uActive = builder.uActive;
+        this.uPassword = builder.uPassword;
     }
 
     public int getUid() {return this.uid;}
@@ -104,4 +113,5 @@ public class Profile implements Serializable {
     public String getTag() {return this.uTag;}
     public double[] getPosition() { return new double[]{this.uLatitude, this.uLongitude};}
     public boolean isuActive() {return this.uActive;}
+    public String getPassword() {return this.uPassword;}
 }
