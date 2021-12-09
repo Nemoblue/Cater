@@ -2,19 +2,16 @@ package com.example.cater.profile;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.annotation.NonNull;
-import androidx.room.Dao;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.Locale;
-import java.util.Random;
 
-@Database(entities = {Profile.class}, version = 2, exportSchema = false)
+@Database(entities = {Profile.class}, version = 5, exportSchema = false)
 public abstract class ProfileRoomDatabase extends RoomDatabase {
     public abstract ProfileDao profileDao();
 
@@ -74,7 +71,7 @@ public abstract class ProfileRoomDatabase extends RoomDatabase {
                     String photo = String.format(Locale.getDefault(),
                             "default_%d", i+1);
                     Profile profile = new Profile
-                            .Builder(i, names[i])
+                            .Builder(i, names[i],"123456")
                             .photo(photo)
                             .position((22.33653 + (Math.random() * 2 - 1) * 0.001)
                                     , (114.26363 + (Math.random() * 2 - 1) * 0.001))

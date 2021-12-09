@@ -1,8 +1,8 @@
 package com.example.cater.ui.login;
 
+import androidx.annotation.NonNull;
 import androidx.lifecycle.ViewModel;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.annotation.NonNull;
 
 import com.example.cater.data.LoginDataSource;
 import com.example.cater.data.LoginRepository;

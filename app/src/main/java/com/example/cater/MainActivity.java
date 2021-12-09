@@ -1,32 +1,20 @@
 package com.example.cater;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuInflater;
-import android.view.MenuItem;
-import android.view.View;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.View;
 
-import com.example.cater.profile.Profile;
-import com.example.cater.profile.ProfileViewModel;
-import com.google.android.gms.maps.GoogleMap;
-import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.android.material.navigation.NavigationView;
-
-import androidx.annotation.Nullable;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.cater.databinding.ActivityMainBinding;
-
-import java.util.List;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity {
 

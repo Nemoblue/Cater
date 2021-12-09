@@ -1,25 +1,25 @@
 package com.example.cater.ui.login;
 
+import android.util.Patterns;
+
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
-import android.util.Patterns;
-
+import com.example.cater.R;
 import com.example.cater.data.LoginRepository;
 import com.example.cater.data.Result;
 import com.example.cater.data.model.LoggedInUser;
-import com.example.cater.R;
+import com.example.cater.profile.ProfileRepository;
 
 public class LoginViewModel extends ViewModel {
 
     private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
     private MutableLiveData<LoginResult> loginResult = new MutableLiveData<>();
     private LoginRepository loginRepository;
+    private ProfileRepository profileRepository;
 
-    LoginViewModel(LoginRepository loginRepository) {
-        this.loginRepository = loginRepository;
-    }
+    LoginViewModel(LoginRepository loginRepository) { this.loginRepository = loginRepository; }
 
     LiveData<LoginFormState> getLoginFormState() {
         return loginFormState;

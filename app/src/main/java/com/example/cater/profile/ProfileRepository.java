@@ -2,14 +2,9 @@ package com.example.cater.profile;
 
 import android.app.Application;
 import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.lifecycle.LiveData;
-import androidx.room.Dao;
-import androidx.room.RoomDatabase;
 
-import java.lang.ref.WeakReference;
-import java.lang.reflect.Parameter;
 import java.util.List;
 
 public class ProfileRepository {
@@ -32,6 +27,8 @@ public class ProfileRepository {
     LiveData<List<Profile>> getActiveProfiles() {return mActiveProfiles;}
 
     LiveData<Profile> getProfileByID(int uid) { return mProfileDao.getProfileByID(uid); }
+
+    int getUidByLogin(String name, String password) { return mProfileDao.getUidByLogin(name, password); }
 
     public void deleteAll() {
         new deleteAllProfilesAsyncTask(mProfileDao).execute();

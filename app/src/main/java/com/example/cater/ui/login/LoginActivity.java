@@ -1,16 +1,9 @@
 package com.example.cater.ui.login;
 
 import android.app.Activity;
-
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
-
+import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-
-import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.KeyEvent;
@@ -22,15 +15,24 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.Nullable;
+import androidx.annotation.StringRes;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
+
 import com.example.cater.R;
-import com.example.cater.ui.login.LoginViewModel;
-import com.example.cater.ui.login.LoginViewModelFactory;
 import com.example.cater.databinding.ActivityLoginBinding;
+import com.example.cater.profile.ProfileViewModel;
 
 public class LoginActivity extends AppCompatActivity {
 
+    public static final String EXTRA_REPLY =
+            "com.example.android.LoginActivity.extra.REPLY";
     private LoginViewModel loginViewModel;
     private ActivityLoginBinding binding;
+    private ProfileViewModel profileViewModel;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -41,6 +43,7 @@ public class LoginActivity extends AppCompatActivity {
 
         loginViewModel = new ViewModelProvider(this, new LoginViewModelFactory())
                 .get(LoginViewModel.class);
+        profileViewModel = ViewModelProviders.of(this).get(ProfileViewModel.class);
 
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
@@ -118,7 +121,9 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 loadingProgressBar.setVisibility(View.VISIBLE);
-                loginViewModel.login(usernameEditText.getText().toString(),
+                //profileViewModel.login(usernameEditText.getText().toString(),
+                        //passwordEditText.getText().toString());  //todo change this with profileviewmodel
+                new loginAsyncTask(profileViewModel).execute(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
             }
         });
@@ -132,5 +137,23 @@ public class LoginActivity extends AppCompatActivity {
 
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
+    }
+
+    private  class loginAsyncTask extends AsyncTask<String, Void, Integer> {
+
+        private ProfileViewModel mAsyncTaskViewModel;
+        loginAsyncTask(ProfileViewModel model) { mAsyncTaskViewModel = model; }
+
+        @Override
+        protected Integer doInBackground(String... strings) {
+            return mAsyncTaskViewModel.login(strings[0], strings[1]);
+        }
+
+        protected void onPostExecute(Integer result) {
+            Intent replyIntent = new Intent();
+            replyIntent.putExtra(EXTRA_REPLY, (int)result);
+            setResult(RESULT_OK, replyIntent);
+            finish();
+        }
     }
 }

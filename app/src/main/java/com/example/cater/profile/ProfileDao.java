@@ -32,4 +32,7 @@ public interface ProfileDao {
 
     @Query("SELECT * FROM profile_table LIMIT 1")
     Profile[] getAnyProfile();
+
+    @Query("SELECT uid FROM profile_table WHERE name = :name AND password = :password")
+    int getUidByLogin(String name, String password);
 }

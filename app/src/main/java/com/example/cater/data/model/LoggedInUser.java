@@ -1,7 +1,5 @@
 package com.example.cater.data.model;
 
-import static java.lang.Integer.parseInt;
-
 import com.example.cater.profile.Profile;
 
 /**
@@ -16,7 +14,6 @@ public class LoggedInUser {
     public LoggedInUser(String userId, String displayName, String password) {
         this.userId = userId;
         this.displayName = displayName;
-        this.profile = new Profile.Builder(parseInt(userId), displayName).password(password).builder();
     }
 
     public String getUserId() {
