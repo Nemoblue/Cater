@@ -11,7 +11,6 @@ public class ProfileRepository {
     private ProfileDao mProfileDao;
     private LiveData<List<Profile>> mAllProfiles;
     private LiveData<List<Profile>> mActiveProfiles;
-    //private LiveData<Profile> mProfile;
 
     ProfileRepository(Application application) {
         ProfileRoomDatabase db = ProfileRoomDatabase.getDatabase(application);
