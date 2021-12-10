@@ -12,7 +12,7 @@ import java.util.List;
 @Dao
 public interface ProfileDao {
 
-    @Insert(onConflict = OnConflictStrategy.IGNORE)
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Profile profile);
 
     @Query("DELETE FROM profile_table")
