@@ -1,9 +1,12 @@
 package com.example.cater.profile;
 
 import android.app.Application;
+import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.MutableLiveData;
+import androidx.lifecycle.Observer;
 
 import java.util.List;
 
@@ -28,17 +31,24 @@ public class ProfileViewModel extends AndroidViewModel {
     public void deleteProfile(Profile profile) {mRepository.deleteProfile(profile);}
 
     public LiveData<Profile> getProfileByID(int uid) {
-        return mRepository.getProfileByID(uid);
+        if (mRepository.getProfileByID(uid) == null) {
+            return new MutableLiveData<>();
+        }
+        mProfile = mRepository.getProfileByID(uid);
+        return mProfile;
     }
+    public LiveData<Profile> getProfile() {
+        if (mProfile == null) {
+            return new MutableLiveData<>();
+        }
+        return mProfile;
+    }
+
     public int getUidByLogin(String name, String password) { return mRepository.getUidByLogin(name, password); }
-    public LiveData<Profile> getProfile() { return mProfile; }
     public int login(String username, String password) {
         int result = 0; //let jason to be default
         result = getUidByLogin(username, password);
 
         return result; //todo implement register situation
-    }
-    public void saveProfile(int uid) {
-        mProfile = getProfileByID(uid);
     }
 }
