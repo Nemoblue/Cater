@@ -113,8 +113,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hkust, zoom));
 
         assert getParentFragment() != null;
-        ProfileViewModel mProfileViewModel = ViewModelProviders.of(getParentFragment()).get(ProfileViewModel.class);
-        mProfileViewModel.getActiveProfiles().observe(getViewLifecycleOwner(), new Observer<List<Profile>>() {
+        ProfileViewModel mProfileViewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel.class);
+        mProfileViewModel.getActiveProfiles().observe(requireActivity(), new Observer<List<Profile>>() {
             @Override
             public void onChanged(@Nullable final List<Profile> profiles) {
                 for (int i = 0; i < mSampleMarker.size(); i++)

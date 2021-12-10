@@ -1,11 +1,13 @@
 package com.example.cater.ui.me;
 
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,13 +29,15 @@ import com.example.cater.profile.Profile;
 import com.example.cater.profile.ProfileViewModel;
 import com.example.cater.ui.login.LoginActivity;
 import com.bumptech.glide.Glide;
+import com.google.android.material.navigation.NavigationView;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class MeFragment extends Fragment {
 
-    private MeViewModel meViewModel;
-    private ProfileViewModel profileViewModel;
+    private ProfileViewModel mProfileViewModel;
+    private Profile mProfile;
     private FragmentMeBinding binding;
 
     private ImageView user_icon;
@@ -50,10 +54,6 @@ public class MeFragment extends Fragment {
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        meViewModel =
-                new ViewModelProvider(this).get(MeViewModel.class);
-        profileViewModel = ViewModelProviders.of(getActivity()).get(ProfileViewModel.class);
-
         binding = FragmentMeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
@@ -65,20 +65,15 @@ public class MeFragment extends Fragment {
         user_age = root.findViewById(R.id.user_age);
         login = root.findViewById(R.id.button);
         //final TextView textView = binding.textMe;
-        meViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+
+        mProfileViewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel.class);
+        mProfileViewModel.getProfile().observe(requireActivity(), new Observer<Profile>() {
             @Override
-            public void onChanged(@Nullable String s) {
-                //textView.setText(s);
+            public void onChanged(Profile profile) {
+                mProfile = profile;
+                setUI(mProfile);
             }
         });
-        if(profileViewModel.getProfile() != null) {
-            profileViewModel.getProfile().observe(getViewLifecycleOwner(), new Observer<Profile>() {
-                @Override
-                public void onChanged(Profile profile) {
-                    setUI(profile);
-                }
-            });
-        }
         user_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,7 +87,7 @@ public class MeFragment extends Fragment {
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-              Intent intent = new Intent(getActivity(), LoginActivity.class);
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivityForResult(intent, LOGIN_REQUEST);
             }
         });
@@ -104,30 +99,24 @@ public class MeFragment extends Fragment {
         super.onDestroyView();
         binding = null;
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK){
+        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
             android.net.Uri uri = data.getData();
             user_icon.setImageURI(uri);
         }
 
-        if(requestCode == LOGIN_REQUEST && resultCode == Activity.RESULT_OK) {
+        if (requestCode == LOGIN_REQUEST && resultCode == Activity.RESULT_OK) {
             int result = data.getIntExtra(LoginActivity.EXTRA_REPLY, 0);
-            profileViewModel.saveProfile(result);
-            new updateUiAsyncTask(profileViewModel).execute(result);
+            mProfileViewModel.getProfileByID(result).observe(requireActivity(), new Observer<Profile>() {
+                @Override
+                public void onChanged(Profile profile) {
+                    mProfile = profile;
+                    setUI(mProfile);
+                }
+            });
         }
-    }
-
-    public void onSaveInstanceState(Bundle savedInstanceState) {
-        super.onSaveInstanceState(savedInstanceState);
-
-        ArrayList<String> texts = new ArrayList<>();
-        texts.add(user_name.getText().toString());
-        texts.add(user_age.getText().toString());
-        texts.add(user_id.getText().toString());
-        texts.add(user_tag.getText().toString());
-        texts.add(user_description.getText().toString());
-        savedInstanceState.putStringArrayList(STATE_FRAGMENT, texts);
     }
 
     public void setUI(Profile profile) {
@@ -137,6 +126,15 @@ public class MeFragment extends Fragment {
         //user_tag.setText(profile.getTag());
         user_description.setText(profile.getDescription());
 
+        NavigationView navigationView = requireActivity().findViewById(R.id.nav_view);
+        View header_layout = navigationView.getHeaderView(0);
+        TextView header_name = header_layout.findViewById(R.id.nav_name);
+        TextView header_description = header_layout.findViewById(R.id.nav_description);
+        ImageView header_icon = header_layout.findViewById(R.id.nav_image_view);
+
+        header_name.setText(profile.getuName());
+        header_description.setText(profile.getDescription());
+
         if (profile.getPhoto() != null) {
             String photoPath = profile.getPhoto();
             if (photoPath.startsWith("default")) {
@@ -144,29 +142,10 @@ public class MeFragment extends Fragment {
                 TypedArray profilePhotoResources =
                         getResources().obtainTypedArray(R.array.profile_photos);
                 Glide.with(getContext()).load(profilePhotoResources.getResourceId(index, 0)).into(user_icon);
+                Glide.with(getContext()).load(profilePhotoResources.getResourceId(index, 0)).into(header_icon);
 
                 profilePhotoResources.recycle();
             }
-        }
-    }
-
-    private  class updateUiAsyncTask extends AsyncTask<Integer, Void, LiveData<Profile>> {
-
-        private ProfileViewModel mAsyncTaskViewModel;
-        updateUiAsyncTask(ProfileViewModel model) { mAsyncTaskViewModel = model; }
-
-        @Override
-        protected LiveData<Profile> doInBackground(Integer...Integers) {
-            return mAsyncTaskViewModel.getProfileByID(Integers[0]);
-        }
-
-        protected void onPostExecute(LiveData<Profile> result) {
-            result.observe(getViewLifecycleOwner(), new Observer<Profile>() {
-                @Override
-                public void onChanged(Profile profile) {
-                    setUI(profile);
-                }
-            });
         }
     }
 
