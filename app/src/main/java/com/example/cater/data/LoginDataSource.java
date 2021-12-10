@@ -12,16 +12,18 @@ public class LoginDataSource {
 
     private ProfileViewModel mProfileViewModel;
 
-    public Result<LoggedInUser> login(String username, String password) {
+    public Result<LoggedInUser> login(String username, String password, boolean dump) {
 
        // mProfileViewModel = ViewModelProviders.of().get(ProfileViewModel.class);
         try {
             // TODO: handle loggedInUser authentication
+            if(dump) {
             LoggedInUser fakeUser =
                     new LoggedInUser(
                             java.util.UUID.randomUUID().toString(),
                             username, password);
             return new Result.Success<>(fakeUser);
+            } else { return new Result.Error(new IOException("Error")); }
         } catch (Exception e) {
             return new Result.Error(new IOException("Error logging in", e));
         }
