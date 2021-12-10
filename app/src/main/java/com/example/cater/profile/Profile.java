@@ -13,7 +13,7 @@ public class Profile implements Serializable {
     @NonNull
     @ColumnInfo(name = "uid")
     private int uid;
-
+    @NonNull
     @ColumnInfo(name = "name")
     protected String uName;
     @ColumnInfo(name = "age")
@@ -30,6 +30,9 @@ public class Profile implements Serializable {
     protected double uLongitude;
     @ColumnInfo(name = "active")
     protected boolean uActive;
+    @NonNull
+    @ColumnInfo(name = "password")
+    protected String uPassword;
 
     public Profile(@NonNull int uid) { this.uid = uid; }
 
@@ -42,10 +45,12 @@ public class Profile implements Serializable {
         private String uTag = null;
         private double[] uPosition = {-1, -1};
         private boolean uActive = true;
+        private String uPassword;
 
-        public Builder(@NonNull int uid, @NonNull String name) {
+        public Builder(@NonNull int uid, @NonNull String name, @NonNull String password) {
             this.uid = uid;
             this.uName = name;
+            this.uPassword = password;
         }
 
         public Builder age(int age) {
@@ -94,6 +99,7 @@ public class Profile implements Serializable {
         this.uLatitude = builder.uPosition[0];
         this.uLongitude = builder.uPosition[1];
         this.uActive = builder.uActive;
+        this.uPassword = builder.uPassword;
     }
 
     public int getUid() {return this.uid;}
@@ -104,4 +110,5 @@ public class Profile implements Serializable {
     public String getTag() {return this.uTag;}
     public double[] getPosition() { return new double[]{this.uLatitude, this.uLongitude};}
     public boolean isuActive() {return this.uActive;}
+    public String getPassword() {return this.uPassword;}
 }

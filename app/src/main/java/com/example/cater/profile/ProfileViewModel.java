@@ -1,8 +1,6 @@
 package com.example.cater.profile;
 
 import android.app.Application;
-import android.os.AsyncTask;
-import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
@@ -20,6 +18,7 @@ public class ProfileViewModel extends AndroidViewModel {
         mRepository = new ProfileRepository(application);
         mAllProfiles = mRepository.getAllProfiles();
         mActiveProfiles = mRepository.getActiveProfiles();
+        mProfile = null;
     }
 
     public LiveData<List<Profile>> getAllProfiles() { return mAllProfiles; }
@@ -30,5 +29,16 @@ public class ProfileViewModel extends AndroidViewModel {
 
     public LiveData<Profile> getProfileByID(int uid) {
         return mRepository.getProfileByID(uid);
+    }
+    public int getUidByLogin(String name, String password) { return mRepository.getUidByLogin(name, password); }
+    public LiveData<Profile> getProfile() { return mProfile; }
+    public int login(String username, String password) {
+        int result = 0; //let jason to be default
+        result = getUidByLogin(username, password);
+
+        return result; //todo implement register situation
+    }
+    public void saveProfile(int uid) {
+        mProfile = getProfileByID(uid);
     }
 }
