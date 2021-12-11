@@ -11,7 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.Locale;
 
-@Database(entities = {Profile.class}, version = 5, exportSchema = false)
+@Database(entities = {Profile.class}, version = 6, exportSchema = false)
 public abstract class ProfileRoomDatabase extends RoomDatabase {
     public abstract ProfileDao profileDao();
 
@@ -71,7 +71,8 @@ public abstract class ProfileRoomDatabase extends RoomDatabase {
                     String photo = String.format(Locale.getDefault(),
                             "default_%d", i+1);
                     Profile profile = new Profile
-                            .Builder(i, names[i],"123456")
+                            .Builder(i,"85253002711","123456")
+                            .name(names[i])
                             .photo(photo)
                             .position((22.33653 + (Math.random() * 2 - 1) * 0.001)
                                     , (114.26363 + (Math.random() * 2 - 1) * 0.001))

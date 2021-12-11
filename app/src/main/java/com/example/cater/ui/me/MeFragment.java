@@ -107,7 +107,8 @@ public class MeFragment extends Fragment {
                     user_age.setInputType(InputType.TYPE_NULL);
                     user_description.setInputType(InputType.TYPE_NULL);
                     //user_tag.setInputType(InputType.TYPE_NULL);
-                    Profile profile = new Profile.Builder(mProfile.getUid(),user_name.getText().toString(), mProfile.getPassword())
+                    Profile profile = new Profile.Builder(mProfile.getUid(), mProfile.getuPhone(), mProfile.getPassword())
+                            .name(mProfile.getuName())
                             .age(parseInt(user_age.getText().toString()))
                             .description(user_description.getText().toString())
                             .builder();
