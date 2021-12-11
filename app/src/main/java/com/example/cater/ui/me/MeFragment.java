@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.res.TypedArray;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -65,10 +66,12 @@ public class MeFragment extends Fragment {
         mProfileViewModel.getProfile().observe(requireActivity(), new Observer<Profile>() {
             @Override
             public void onChanged(Profile profile) {
+                Log.i(MeFragment.class.toString(),"first time!!!!!!");
                 mProfile = profile;
                 setUI(mProfile);
             }
         });
+
         user_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -115,6 +118,16 @@ public class MeFragment extends Fragment {
         return root;
     }
 
+   /* @Override
+    public void onStart() {
+        super.onStart();
+        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+        int visible = sharedPref.getInt(getString(R.string.setting), View.INVISIBLE);
+        String login_state = sharedPref.getString(getString(R.string.button_login_register), getString(R.string.button_login_register));
+        set_button.setVisibility(visible);
+        login.setText(login_state);
+    }
+*/
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -138,7 +151,13 @@ public class MeFragment extends Fragment {
                 }
             });
             login.setText(R.string.logout);
-
+            set_button.setVisibility(View.VISIBLE);
+   /*         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+            editor.putString(getString(R.string.button_login_register), login.getText().toString());
+            editor.putInt(getString(R.string.setting), set_button.getVisibility());
+            editor.apply();
+   */
         }
     }
 
@@ -148,6 +167,9 @@ public class MeFragment extends Fragment {
         user_id.setText(String.valueOf(profile.getUid()));
         //user_tag.setText(profile.getTag());
         user_description.setText(profile.getDescription());
+
+        set_button.setVisibility(View.VISIBLE);
+        login.setText(R.string.logout);
 
         NavigationView navigationView = requireActivity().findViewById(R.id.nav_view);
         View header_layout = navigationView.getHeaderView(0);
@@ -171,6 +193,5 @@ public class MeFragment extends Fragment {
             }
         }
     }
-
     //todo setting things should be update to database, register not implemented, login failure not implemented....kill programs need to save profile...
 }
