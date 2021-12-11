@@ -1,5 +1,7 @@
 package com.example.cater.ui.home;
 
+import com.google.android.gms.maps.model.LatLng;
+
 import java.io.Serializable;
 
 /**
@@ -9,11 +11,13 @@ public class RestaurantBean implements Serializable {
     String name;
     int resId;
     String distance;
+    double[] position;
 
-    public RestaurantBean(String name, int resId, String distance) {
+    public RestaurantBean(String name, int resId, String distance, double latitude, double longitude) {
         this.name = name;
         this.resId = resId;
         this.distance = distance;
+        this.position = new double[]{latitude, longitude};
     }
 
     public String getDistance() {
@@ -38,5 +42,9 @@ public class RestaurantBean implements Serializable {
 
     public void setResId(int resId) {
         this.resId = resId;
+    }
+
+    public double[] getLatLng() {
+        return position;
     }
 }
