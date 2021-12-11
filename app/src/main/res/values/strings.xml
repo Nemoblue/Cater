@@ -60,5 +60,8 @@
     <string name="login_failed">"Login failed"</string>
     <string name="button_login_register">Login/Register</string>
     <string name="register">Register</string>
+    <string name="setting">setting</string>
+    <string name="save">save</string>
+    <string name="logout">logout</string>
 
 </resources>

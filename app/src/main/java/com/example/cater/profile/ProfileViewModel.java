@@ -44,7 +44,6 @@ public class ProfileViewModel extends AndroidViewModel {
 
     public int getUidByLogin(String name, String password) { return mRepository.getUidByLogin(name, password); }
     public int getIdCount() { return mRepository.getIdCount(); }
-    public Profile getProfileByLogin(String name, String password) { return mRepository.getProfileByLogin(name, password); }
     public int login(String username, String password) {
         int result = 0; //let jason to be default
         result = getUidByLogin(username, password);
