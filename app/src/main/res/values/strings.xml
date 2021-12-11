@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Cater</string>
-    <string name="nav_header_title">User_name</string>
-    <string name="nav_header_subtitle">User_description</string>
+    <string name="nav_header_title">Not Login</string>
+    <string name="nav_header_subtitle">Please login in at Me page.</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
