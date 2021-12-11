@@ -35,4 +35,7 @@ public interface ProfileDao {
 
     @Query("SELECT uid FROM profile_table WHERE name = :name AND password = :password")
     int getUidByLogin(String name, String password);
+
+    @Query("SELECT COUNT(uid) FROM profile_table")
+    int getIdCount();
 }

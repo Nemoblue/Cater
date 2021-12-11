@@ -1,12 +1,10 @@
 package com.example.cater.profile;
 
 import android.app.Application;
-import android.util.Log;
 
 import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
-import androidx.lifecycle.Observer;
 
 import java.util.List;
 
@@ -45,6 +43,7 @@ public class ProfileViewModel extends AndroidViewModel {
     }
 
     public int getUidByLogin(String name, String password) { return mRepository.getUidByLogin(name, password); }
+    public int getIdCount() { return mRepository.getIdCount(); }
     public int login(String username, String password) {
         int result = 0; //let jason to be default
         result = getUidByLogin(username, password);

@@ -1,18 +1,16 @@
 package com.example.cater.ui.login;
 
-import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.KeyEvent;
 import android.view.View;
-import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -24,6 +22,7 @@ import androidx.lifecycle.ViewModelProviders;
 
 import com.example.cater.R;
 import com.example.cater.databinding.ActivityLoginBinding;
+import com.example.cater.profile.Profile;
 import com.example.cater.profile.ProfileViewModel;
 
 public class LoginActivity extends AppCompatActivity {
@@ -48,6 +47,7 @@ public class LoginActivity extends AppCompatActivity {
         final EditText usernameEditText = binding.username;
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
+        final Button registerButton = binding.register;
         final ProgressBar loadingProgressBar = binding.loading;
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
@@ -66,7 +66,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
+        /*loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
             @Override
             public void onChanged(@Nullable LoginResult loginResult) {
                 if (loginResult == null) {
@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
-
+*/
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -105,7 +105,7 @@ public class LoginActivity extends AppCompatActivity {
         };
         usernameEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
-        passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+       /* passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
             @Override
             public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
@@ -116,25 +116,31 @@ public class LoginActivity extends AppCompatActivity {
                 return false;
             }
         });
-
+        */
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                loadingProgressBar.setVisibility(View.VISIBLE);
-                //profileViewModel.login(usernameEditText.getText().toString(),
-                        //passwordEditText.getText().toString());  //todo change this with profileviewmodel
-                new loginAsyncTask(profileViewModel).execute(usernameEditText.getText().toString(),
+                //loadingProgressBar.setVisibility(View.VISIBLE);
+                new loginAsyncTask(profileViewModel, passwordEditText).execute(usernameEditText.getText().toString(),
+                        passwordEditText.getText().toString());
+            }
+        });
+
+        registerButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new registerAsyncTask(profileViewModel).execute(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
             }
         });
     }
 
-    private void updateUiWithUser(LoggedInUserView model) {
+  /*  private void updateUiWithUser(LoggedInUserView model) {
         String welcome = getString(R.string.welcome) + model.getDisplayName();
         // TODO : initiate successful logged in experience
         Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
     }
-
+*/
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
@@ -142,7 +148,11 @@ public class LoginActivity extends AppCompatActivity {
     private  class loginAsyncTask extends AsyncTask<String, Void, Integer> {
 
         private ProfileViewModel mAsyncTaskViewModel;
-        loginAsyncTask(ProfileViewModel model) { mAsyncTaskViewModel = model; }
+        private EditText passwordText;
+        loginAsyncTask(ProfileViewModel model, EditText text) {
+            mAsyncTaskViewModel = model;
+            passwordText = text;
+        }
 
         @Override
         protected Integer doInBackground(String... strings) {
@@ -150,10 +160,49 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         protected void onPostExecute(Integer result) {
-            Intent replyIntent = new Intent();
-            replyIntent.putExtra(EXTRA_REPLY, (int)result);
-            setResult(RESULT_OK, replyIntent);
-            finish();
+            if(result == 0) {
+                View view = LoginActivity.this.getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager)getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                }
+                showLoginFailed(R.string.login_failed);
+                passwordText.getText().clear();
+                loginViewModel.login("dump","dump",false);
+            } else {
+               replyMe(result);
+            }
         }
+    }
+
+    private class registerAsyncTask extends AsyncTask<String, Void, Integer> {
+        private ProfileViewModel mAsyncTaskViewModel;
+
+        registerAsyncTask(ProfileViewModel model) {
+            mAsyncTaskViewModel = model;
+        }
+
+        @Override
+        protected Integer doInBackground(String... strings) {
+            int new_id = mAsyncTaskViewModel.getIdCount();
+            Profile profile = new Profile
+                    .Builder(new_id, strings[0], strings[1])
+                    .builder();
+
+            mAsyncTaskViewModel.insert(profile);
+
+            return new_id;
+        }
+
+        protected void onPostExecute(Integer result) {
+            replyMe(result);
+        }
+    }
+
+    private void replyMe(int result) {
+        Intent replyIntent = new Intent();
+        replyIntent.putExtra(EXTRA_REPLY, (int)result);
+        setResult(RESULT_OK, replyIntent);
+        finish();
     }
 }

@@ -29,6 +29,8 @@ public class ProfileRepository {
 
     int getUidByLogin(String name, String password) { return mProfileDao.getUidByLogin(name, password); }
 
+    int getIdCount() { return mProfileDao.getIdCount(); }
+
     public void deleteAll() {
         new deleteAllProfilesAsyncTask(mProfileDao).execute();
     }
