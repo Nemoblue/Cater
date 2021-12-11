@@ -1,17 +1,13 @@
 package com.example.cater.ui.home;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,7 +16,6 @@ import com.example.cater.R;
 import com.example.cater.databinding.FragmentHomeBinding;
 import com.example.cater.profile.Profile;
 import com.example.cater.profile.ProfileViewModel;
-import com.google.android.gms.maps.model.LatLng;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -60,7 +55,6 @@ public class HomeFragment extends Fragment {
     }
 
     public void initView() {
-        Random random = new Random();
         list.add(0, new RestaurantBean("Can.teen II", R.mipmap.a1, "--m",
                 22.337339543105305, 114.26412914531693));
         list.add(1, new RestaurantBean("lg7 Kitchen 1 Asia Pacific Catering", R.mipmap.a2, "--m",
