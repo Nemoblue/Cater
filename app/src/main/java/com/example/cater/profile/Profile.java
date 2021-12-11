@@ -13,7 +13,6 @@ public class Profile implements Serializable {
     @NonNull
     @ColumnInfo(name = "uid")
     private int uid;
-    @NonNull
     @ColumnInfo(name = "name")
     protected String uName;
     @ColumnInfo(name = "age")
@@ -30,27 +29,40 @@ public class Profile implements Serializable {
     protected double uLongitude;
     @ColumnInfo(name = "active")
     protected boolean uActive;
+
+    @NonNull
+    @ColumnInfo (name = "phone")
+    protected String uPhone;
     @NonNull
     @ColumnInfo(name = "password")
     protected String uPassword;
 
-    public Profile(@NonNull int uid) { this.uid = uid; }
+    public Profile(@NonNull int uid) { this.uid = uid;
+        uPhone = "Default Phone Number";
+        uPassword = "123456";
+    }
 
     public static class Builder {
         private int uid;
-        private String uName;
+        private String uName = null;
         private int uAge;
         private String uPhoto = null;
         private String uDescription = null;
         private String uTag = null;
         private double[] uPosition = {-1, -1};
         private boolean uActive = true;
+        private String uPhone;
         private String uPassword;
 
-        public Builder(@NonNull int uid, @NonNull String name, @NonNull String password) {
+        public Builder(@NonNull int uid, @NonNull String phone, @NonNull String password) {
             this.uid = uid;
-            this.uName = name;
+            this.uPhone = phone;
             this.uPassword = password;
+        }
+
+        public Builder name(String name) {
+            uName = name;
+            return this;
         }
 
         public Builder age(int age) {
@@ -91,7 +103,8 @@ public class Profile implements Serializable {
 
     public Profile(Builder builder) {
         this.uid = builder.uid;
-        this.uName = builder.uName;
+        if (builder.uName == null)
+            this.uName = builder.uPhone;
         this.uAge = builder.uAge;
         this.uPhoto = builder.uPhoto;
         this.uDescription = builder.uDescription;
@@ -99,6 +112,7 @@ public class Profile implements Serializable {
         this.uLatitude = builder.uPosition[0];
         this.uLongitude = builder.uPosition[1];
         this.uActive = builder.uActive;
+        this.uPhone = builder.uPhone;
         this.uPassword = builder.uPassword;
     }
 
@@ -110,5 +124,6 @@ public class Profile implements Serializable {
     public String getTag() {return this.uTag;}
     public double[] getPosition() { return new double[]{this.uLatitude, this.uLongitude};}
     public boolean isuActive() {return this.uActive;}
+    public String getuPhone() {return this.uPhone;}
     public String getPassword() {return this.uPassword;}
 }
