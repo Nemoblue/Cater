@@ -19,7 +19,7 @@ public class ProfileViewModel extends AndroidViewModel {
         mRepository = new ProfileRepository(application);
         mAllProfiles = mRepository.getAllProfiles();
         mActiveProfiles = mRepository.getActiveProfiles();
-        mProfile = null;
+        mProfile = new MutableLiveData<>();
     }
 
     public LiveData<List<Profile>> getAllProfiles() { return mAllProfiles; }

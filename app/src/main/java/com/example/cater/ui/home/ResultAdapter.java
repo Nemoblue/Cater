@@ -12,16 +12,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.resource.bitmap.RoundedCorners;
-import com.bumptech.glide.request.RequestOptions;
 import com.example.cater.R;
-import com.makeramen.roundedimageview.RoundedImageView;
+import com.example.cater.appointment.Appointment;
 
 import java.util.List;
 
 public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultVH> {
     Context context;
+    private List<Appointment> appointments;
 
     public ResultAdapter(Context context) {
         this.context = context;
@@ -35,16 +33,29 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultVH> 
 
     @Override
     public void onBindViewHolder(@NonNull ResultVH holder, int position) {
-
+        if (appointments != null) {
+            Appointment current = appointments.get(position);
+            holder.mTvDesc.setText(current.getAppoint_date().toString().substring(0,19));
+        } else {
+            // Covers the case of data not being ready yet.
+            holder.mTvName.setText("No Appointment");
+        }
     }
 
     @Override
     public int getItemCount() {
-        return 15;
+        if (appointments != null)
+            return appointments.size();
+        else return 0;
+    }
+
+    void setAppointments(List<Appointment> appoints){
+        appointments = appoints;
+        notifyDataSetChanged();
     }
 
     public class ResultVH extends RecyclerView.ViewHolder{
-        RoundedImageView mIvHead;
+        ImageView mIvHead;
         TextView mTvName;
         TextView mTvDesc;
         TextView mTvInvitation;

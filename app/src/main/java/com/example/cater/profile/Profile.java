@@ -10,7 +10,6 @@ import java.io.Serializable;
 @Entity(tableName = "profile_table")
 public class Profile implements Serializable {
     @PrimaryKey
-    @NonNull
     @ColumnInfo(name = "uid")
     private int uid;
     @ColumnInfo(name = "name")
@@ -37,7 +36,7 @@ public class Profile implements Serializable {
     @ColumnInfo(name = "password")
     protected String uPassword;
 
-    public Profile(@NonNull int uid) { this.uid = uid;
+    public Profile(int uid) { this.uid = uid;
         uPhone = "Default Phone Number";
         uPassword = "123456";
     }
@@ -54,7 +53,7 @@ public class Profile implements Serializable {
         private String uPhone;
         private String uPassword;
 
-        public Builder(@NonNull int uid, @NonNull String phone, @NonNull String password) {
+        public Builder(int uid, @NonNull String phone, @NonNull String password) {
             this.uid = uid;
             this.uPhone = phone;
             this.uPassword = password;
@@ -105,6 +104,8 @@ public class Profile implements Serializable {
         this.uid = builder.uid;
         if (builder.uName == null)
             this.uName = builder.uPhone;
+        else
+            this.uName = builder.uName;
         this.uAge = builder.uAge;
         this.uPhoto = builder.uPhoto;
         this.uDescription = builder.uDescription;
