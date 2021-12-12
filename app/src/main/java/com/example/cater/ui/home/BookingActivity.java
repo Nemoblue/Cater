@@ -8,6 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,6 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.cater.R;
 import com.example.cater.appointment.Appointment;
 import com.example.cater.appointment.AppointmentViewModel;
+import com.example.cater.profile.Profile;
+import com.example.cater.profile.ProfileViewModel;
 import com.example.cater.tools.BasisTimesUtils;
 
 import java.util.List;
@@ -41,7 +44,7 @@ public class BookingActivity extends AppCompatActivity {
         initView();
     }
 
-    private void initView(){
+    private void initView() {
         getSupportActionBar().setTitle("Booking");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -50,7 +53,7 @@ public class BookingActivity extends AppCompatActivity {
         mRvResult = findViewById(R.id.mRvResult);
 
         mBtnDate.setOnClickListener(view -> showSelectDate(0));
-        mBtnFromTime.setOnClickListener(view -> showSelectTime("请选择开始时间",0));
+        mBtnFromTime.setOnClickListener(view -> showSelectTime("请选择开始时间", 0));
 
         mRvResult.setLayoutManager(new LinearLayoutManager(this));
         resultAdapter = new ResultAdapter(this);
@@ -67,15 +70,15 @@ public class BookingActivity extends AppCompatActivity {
 
     }
 
-    private void showSelectDate(int type){
+    private void showSelectDate(int type) {
         String[] strs = BasisTimesUtils.getNowDate().split("-");//yyyy-MM-dd
         BasisTimesUtils.showDatePickerDialog(this, true, "请选择日期", Integer.parseInt(strs[0]), Integer.parseInt(strs[1]), Integer.parseInt(strs[2]), new BasisTimesUtils.OnDatePickerListener() {
             @Override
             public void onConfirm(int year, int month, int dayOfMonth) {
-                String mm = month>9?""+month:"0"+month;
-                String dd = dayOfMonth>9?""+dayOfMonth:"0"+dayOfMonth;
-                if(type==0){
-                    mBtnDate.setText(year+"-"+mm+"-"+dd);
+                String mm = month > 9 ? "" + month : "0" + month;
+                String dd = dayOfMonth > 9 ? "" + dayOfMonth : "0" + dayOfMonth;
+                if (type == 0) {
+                    mBtnDate.setText(year + "-" + mm + "-" + dd);
                 }
             }
 
@@ -85,16 +88,16 @@ public class BookingActivity extends AppCompatActivity {
             }
         });
     }
-    
-    private void showSelectTime(String tip,int type){
+
+    private void showSelectTime(String tip, int type) {
         String[] strs = BasisTimesUtils.getNowTime().split(":");//yyyy-MM-dd
         BasisTimesUtils.showTimerPickerDialog(this, true, tip, Integer.parseInt(strs[0]), Integer.parseInt(strs[1]), true, new BasisTimesUtils.OnTimerPickerListener() {
             @Override
             public void onConfirm(int hourOfDay, int minute) {
-                String hour = hourOfDay>9?""+hourOfDay:"0"+hourOfDay;
-                String mm = minute>9?""+minute:"0"+minute;
-                if(type==0){
-                    mBtnFromTime.setText(hour+":"+mm);
+                String hour = hourOfDay > 9 ? "" + hourOfDay : "0" + hourOfDay;
+                String mm = minute > 9 ? "" + minute : "0" + minute;
+                if (type == 0) {
+                    mBtnFromTime.setText(hour + ":" + mm);
                 }
             }
 

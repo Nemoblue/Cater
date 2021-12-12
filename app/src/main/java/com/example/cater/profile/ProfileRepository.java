@@ -9,18 +9,12 @@ import java.util.List;
 
 public class ProfileRepository {
     private ProfileDao mProfileDao;
-    private LiveData<List<Profile>> mAllProfiles;
     private LiveData<List<Profile>> mActiveProfiles;
 
     ProfileRepository(Application application) {
         ProfileRoomDatabase db = ProfileRoomDatabase.getDatabase(application);
         mProfileDao = db.profileDao();
-        mAllProfiles = mProfileDao.getAllProfiles();
         mActiveProfiles = mProfileDao.getActiveProfiles();
-    }
-
-    LiveData<List<Profile>> getAllProfiles() {
-        return mAllProfiles;
     }
 
     LiveData<List<Profile>> getActiveProfiles() {return mActiveProfiles;}
