@@ -10,19 +10,16 @@ import java.util.List;
 
 public class ProfileViewModel extends AndroidViewModel {
     private ProfileRepository mRepository;
-    private LiveData<List<Profile>> mAllProfiles;
     private LiveData<List<Profile>> mActiveProfiles;
     private LiveData<Profile> mProfile;
 
     public ProfileViewModel (Application application) {
         super(application);
         mRepository = new ProfileRepository(application);
-        mAllProfiles = mRepository.getAllProfiles();
         mActiveProfiles = mRepository.getActiveProfiles();
         mProfile = new MutableLiveData<>();
     }
 
-    public LiveData<List<Profile>> getAllProfiles() { return mAllProfiles; }
     public LiveData<List<Profile>> getActiveProfiles() {return mActiveProfiles;}
     public void insert(Profile profile) { mRepository.insert(profile); }
     public void deleteAll() {mRepository.deleteAll();}

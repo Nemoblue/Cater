@@ -14,7 +14,7 @@ import com.example.cater.R;
 
 import java.util.Date;
 
-@Database(entities = {Appointment.class}, version = 1, exportSchema = false)
+@Database(entities = {Appointment.class}, version = 3, exportSchema = false)
 public abstract class AppointmentDatabase extends RoomDatabase {
     public abstract AppointmentDao appointmentDao();
 
@@ -59,9 +59,12 @@ public abstract class AppointmentDatabase extends RoomDatabase {
             if (mDao.getAnyAppointment().length < 1) {
                 // Populate the database
                 Date date = new Date(System.currentTimeMillis());
-                Appointment appointment1 = new Appointment(0, R.mipmap.a2, 0, date, date);
-                Appointment appointment2 = new Appointment(1, R.mipmap.a1, 0, date, date);
-                Appointment appointment3 = new Appointment(2, R.mipmap.a1, 0, date, date);
+                Appointment appointment1 = new Appointment.Builder(0, R.mipmap.a2, 0, date, date)
+                        .name("Jason").photo("default_1").builder();
+                Appointment appointment2 = new Appointment.Builder(1, R.mipmap.a1, 1, date, date)
+                        .name("Monica").photo("default_2").builder();
+                Appointment appointment3 = new Appointment.Builder(2, R.mipmap.a1, 3, date, date)
+                        .name("David").photo("default_4").builder();
                 mDao.insert(appointment1);
                 mDao.insert(appointment2);
                 mDao.insert(appointment3);
