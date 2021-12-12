@@ -29,11 +29,15 @@ import com.example.cater.profile.ProfileViewModel;
 import com.example.cater.ui.login.LoginActivity;
 import com.google.android.material.navigation.NavigationView;
 
+import java.util.Locale;
+
 public class MeFragment extends Fragment {
 
     private ProfileViewModel mProfileViewModel;
     private Profile mProfile;
+    private Profile zero_profile;
     private FragmentMeBinding binding;
+    private int icon_count = 0;
 
     private ImageView user_icon;
     private Button login;
@@ -54,19 +58,26 @@ public class MeFragment extends Fragment {
 
         user_id = root.findViewById(R.id.user_id);
         user_icon = root.findViewById(R.id.user_icon);
+        user_icon.setEnabled(false);
         user_name = root.findViewById(R.id.user_name);
         user_tag = root.findViewById(R.id.user_tag);
         user_description = root.findViewById(R.id.user_description);
         user_age = root.findViewById(R.id.user_age);
         login = root.findViewById(R.id.login_button);
         set_button = root.findViewById(R.id.setting_button);
-        //final TextView textView = binding.textMe;
+
+        zero_profile = new Profile.Builder(0,"00000000000","123456")
+                .name("")
+                .description("Description")
+                .age(18)
+                .tag("Tag")
+                .builder();
+
 
         mProfileViewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel.class);
         mProfileViewModel.getProfile().observe(requireActivity(), new Observer<Profile>() {
             @Override
             public void onChanged(Profile profile) {
-                Log.i(MeFragment.class.toString(),"first time!!!!!!");
                 mProfile = profile;
                 setUI(mProfile);
             }
@@ -75,43 +86,62 @@ public class MeFragment extends Fragment {
         user_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intent = new Intent();
-                intent.setType("image/*");
-                intent.setAction(Intent.ACTION_GET_CONTENT);
-                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
+                if(icon_count == 7)
+                    icon_count = 0;
+                else
+                    icon_count++;
+                TypedArray profilePhotoResources =
+                        getResources().obtainTypedArray(R.array.profile_photos);
+                Glide.with(getContext()).load(profilePhotoResources.getResourceId(icon_count, 0)).into(user_icon);
+
+//                Intent intent = new Intent();
+//                intent.setType("image/*");
+//                intent.setAction(Intent.ACTION_GET_CONTENT);
+//                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
             }
         });
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                if(login.getText().toString().equals(getString(R.string.button_login_register))) {
                 Intent intent = new Intent(getActivity(), LoginActivity.class);
                 startActivityForResult(intent, LOGIN_REQUEST);
+                } else {
+                        mProfile = zero_profile;
+                        mProfileViewModel.logout();
+                        setUI(mProfile);
+                }
             }
         });
 
         set_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(set_button.getText().equals("setting")) {
+                if(set_button.getText().toString().equals(getString(R.string.setting))) {
                     set_button.setText(R.string.save);
-                    user_icon.setClickable(true);
+                    user_icon.setEnabled(true);
                     user_name.setInputType(InputType.TYPE_CLASS_TEXT);
                     user_age.setInputType(InputType.TYPE_CLASS_NUMBER);
                     user_description.setInputType(InputType.TYPE_CLASS_TEXT);
                     //user_tag.setInputType(InputType.TYPE_CLASS_TEXT);
                 } else {
+                    Log.d(MeFragment.class.toString(), "enter save function");
                     set_button.setText(R.string.setting);
-                    user_icon.setClickable(false);
+                    user_icon.setEnabled(false);
                     user_name.setInputType(InputType.TYPE_NULL);
                     user_age.setInputType(InputType.TYPE_NULL);
                     user_description.setInputType(InputType.TYPE_NULL);
                     //user_tag.setInputType(InputType.TYPE_NULL);
                     Profile profile = new Profile.Builder(mProfile.getUid(), mProfile.getuPhone(), mProfile.getPassword())
-                            .name(mProfile.getuName())
                             .age(parseInt(user_age.getText().toString()))
+                            .name(user_name.getText().toString())
                             .description(user_description.getText().toString())
+                            .photo(String.format(Locale.getDefault(),
+                                    "default_%d", icon_count))
                             .builder();
+                    mProfile = profile;
+                    setUI(profile);
                     mProfileViewModel.insert(profile);
                 }
             }
@@ -119,16 +149,6 @@ public class MeFragment extends Fragment {
         return root;
     }
 
-   /* @Override
-    public void onStart() {
-        super.onStart();
-        SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-        int visible = sharedPref.getInt(getString(R.string.setting), View.INVISIBLE);
-        String login_state = sharedPref.getString(getString(R.string.button_login_register), getString(R.string.button_login_register));
-        set_button.setVisibility(visible);
-        login.setText(login_state);
-    }
-*/
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -143,6 +163,7 @@ public class MeFragment extends Fragment {
         }
 
         if (requestCode == LOGIN_REQUEST && resultCode == Activity.RESULT_OK) {
+            Log.d(MeFragment.class.toString(), "enter onResult Login or register");
             int result = data.getIntExtra(LoginActivity.EXTRA_REPLY, 0);
             mProfileViewModel.getProfileByID(result).observe(requireActivity(), new Observer<Profile>() {
                 @Override
@@ -152,26 +173,25 @@ public class MeFragment extends Fragment {
                 }
             });
             login.setText(R.string.logout);
-            set_button.setVisibility(View.VISIBLE);
-   /*         SharedPreferences sharedPref = getActivity().getPreferences(Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-            editor.putString(getString(R.string.button_login_register), login.getText().toString());
-            editor.putInt(getString(R.string.setting), set_button.getVisibility());
-            editor.apply();
-   */
         }
     }
 
     public void setUI(Profile profile) {
         user_name.setText(profile.getuName());
-        user_age.setText(String.valueOf(profile.getAge()));
-        user_id.setText(String.valueOf(profile.getUid()));
         //user_tag.setText(profile.getTag());
         user_description.setText(profile.getDescription());
-
-        set_button.setVisibility(View.VISIBLE);
-        login.setText(R.string.logout);
-
+        if(profile.getUid() != 0) {
+            user_age.setText(String.valueOf(profile.getAge()));
+            user_id.setText(String.valueOf(profile.getUid()));
+            set_button.setVisibility(View.VISIBLE);
+            login.setText(R.string.logout);
+        } else {
+            user_id.setText("");
+            user_age.setText("");
+            set_button.setVisibility(View.INVISIBLE);
+            login.setText(R.string.button_login_register);
+            Glide.with(getContext()).load(R.drawable.ic_menu_home).into(user_icon);
+        }
         NavigationView navigationView = requireActivity().findViewById(R.id.nav_view);
         View header_layout = navigationView.getHeaderView(0);
         TextView header_name = header_layout.findViewById(R.id.nav_name);
@@ -189,7 +209,7 @@ public class MeFragment extends Fragment {
                         getResources().obtainTypedArray(R.array.profile_photos);
                 Glide.with(getContext()).load(profilePhotoResources.getResourceId(index, 0)).into(user_icon);
                 Glide.with(getContext()).load(profilePhotoResources.getResourceId(index, 0)).into(header_icon);
-
+                icon_count = index;
                 profilePhotoResources.recycle();
             }
         }

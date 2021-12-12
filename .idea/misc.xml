@@ -11,7 +11,6 @@
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/drawable/side_nav_bar.xml" value="0.2942708333333333" />
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/layout-w1240dp/activity_login.xml" value="0.178714859437751" />
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/layout-w936dp/activity_login.xml" value="0.20859375" />
-        <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/layout/activity_boooking.xml" value="0.16041666666666668" />
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/layout/activity_detail.xml" value="0.278125" />
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/layout/activity_login.xml" value="0.278125" />
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/layout/activity_main.xml" value="0.278125" />
@@ -23,7 +22,6 @@
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/layout/fragment_map.xml" value="0.278125" />
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/layout/fragment_me.xml" value="0.278125" />
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/layout/fragment_slideshow.xml" value="0.278125" />
-        <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/layout/item_home.xml" value="0.16041666666666668" />
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/layout/nav_header_main.xml" value="0.278125" />
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/menu/activity_main_drawer.xml" value="0.278125" />
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/menu/botton_nav_menu.xml" value="0.1" />
@@ -32,8 +30,14 @@
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2942708333333333" />
         <entry key="..\:/AndroidStudio_Projects/Cater/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.2942708333333333" />
         <entry key="..\:/Cater/app/src/main/res/layout/activity_login.xml" value="0.2" />
-        <entry key="..\:/Cater/app/src/main/res/layout/fragment_me.xml" value="0.25364583333333335" />
+        <entry key="..\:/Cater/app/src/main/res/layout/fragment_home.xml" value="0.1" />
+        <entry key="..\:/Cater/app/src/main/res/layout/fragment_me.xml" value="0.33984375" />
+        <entry key="..\:/Cater/app/src/main/res/layout/fragment_me1.xml" value="0.18931159420289856" />
         <entry key="..\:/Cater/app/src/main/res/layout/fragment_setting.xml" value="0.4" />
+        <entry key="..\:/Cater/app/src/main/res/layout/item_home.xml" value="0.2" />
+        <entry key="..\:/Cater/app/src/main/res/layout/item_me.xml" value="0.264" />
+        <entry key="..\:/Cater/app/src/main/res/layout/item_result.xml" value="0.264" />
+        <entry key="..\:/Cater/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.2265625" />
         <entry key="..\:/Cater/app/src/main/res/xml/root_preferences.xml" value="0.264" />
         <entry key="..\:/work/Cater/app/src/main/res/layout/activity_boooking.xml" value="0.1" />
       </map>
