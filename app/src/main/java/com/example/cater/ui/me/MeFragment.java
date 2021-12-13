@@ -66,8 +66,8 @@ public class MeFragment extends Fragment {
         set_button = root.findViewById(R.id.setting_button);
 
         zero_profile = new Profile.Builder(0, "00000000000")
-                .name(" ")
-                .description("Description")
+                .name("Not Login")
+                .description("Please login in or register to continue.")
                 .age(18)
                 .builder();
 
@@ -102,7 +102,6 @@ public class MeFragment extends Fragment {
                 } else {
                     mProfile = zero_profile;
                     mProfileViewModel.logout();
-                    Glide.with(getContext()).load(R.drawable.ic_menu_home).into(user_icon);
                     setUI(mProfile);
                 }
             }
@@ -209,8 +208,10 @@ public class MeFragment extends Fragment {
                     icon_count = index;
                     profilePhotoResources.recycle();
                 }
+            } else {
+                Glide.with(getContext()).load(R.drawable.ic_menu_home).into(user_icon);
+                Glide.with(getContext()).load(R.mipmap.ic_launcher_round).into(header_icon);
             }
         } catch (Exception ignore) {}
     }
-    //todo setting things should be update to database, register not implemented, login failure not implemented....kill programs need to save profile...
 }
