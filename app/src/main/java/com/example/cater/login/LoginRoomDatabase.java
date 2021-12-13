@@ -9,8 +9,6 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
-import com.example.cater.profile.ProfileRoomDatabase;
-
 @Database(entities = {Login.class}, version = 1, exportSchema = false)
 public abstract class LoginRoomDatabase extends RoomDatabase {
     public abstract LoginDao loginDao();
@@ -32,7 +30,7 @@ public abstract class LoginRoomDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    private static RoomDatabase.Callback sRoomDatabaseCallback =
+    private static final RoomDatabase.Callback sRoomDatabaseCallback =
             new RoomDatabase.Callback() {
 
                 @Override

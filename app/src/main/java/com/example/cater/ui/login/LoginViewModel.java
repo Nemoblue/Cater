@@ -1,7 +1,5 @@
 package com.example.cater.ui.login;
 
-import android.util.Patterns;
-
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
@@ -10,7 +8,7 @@ import com.example.cater.R;
 
 public class LoginViewModel extends ViewModel {
 
-    private MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
+    private final MutableLiveData<LoginFormState> loginFormState = new MutableLiveData<>();
 
     LiveData<LoginFormState> getLoginFormState() {
         return loginFormState;

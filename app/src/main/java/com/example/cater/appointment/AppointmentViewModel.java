@@ -8,12 +8,10 @@ import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import com.example.cater.profile.Profile;
-
 import java.util.List;
 
 public class AppointmentViewModel extends AndroidViewModel {
-    private AppointmentRepository mRepository;
+    private final AppointmentRepository mRepository;
     private LiveData<List<Appointment>> mCurrentAppointments;
     private LiveData<Appointment> mAppointment;
 

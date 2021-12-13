@@ -10,7 +10,7 @@ import java.util.List;
 
 
 public class AppointmentRepository {
-    private AppointmentDao mAppointmentDao;
+    private final AppointmentDao mAppointmentDao;
 
     AppointmentRepository(Application application) {
         AppointmentDatabase db = AppointmentDatabase.getDatabase(application);
@@ -41,7 +41,7 @@ public class AppointmentRepository {
     }
 
     private static class insertAsyncTask extends AsyncTask<Appointment, Void, Void> {
-        private AppointmentDao mAsyncTaskDao;
+        private final AppointmentDao mAsyncTaskDao;
 
         insertAsyncTask(AppointmentDao dao) {
             mAsyncTaskDao = dao;
@@ -55,7 +55,7 @@ public class AppointmentRepository {
     }
 
     private static class deleteAllAppointmentsAsyncTask extends AsyncTask<Void, Void, Void> {
-        private AppointmentDao mAsyncTaskDao;
+        private final AppointmentDao mAsyncTaskDao;
 
         deleteAllAppointmentsAsyncTask(AppointmentDao dao) {
             mAsyncTaskDao = dao;
@@ -69,7 +69,7 @@ public class AppointmentRepository {
     }
 
     private static class deleteAppointmentAsyncTask extends AsyncTask<Appointment, Void, Void> {
-        private AppointmentDao mAsyncTaskDao;
+        private final AppointmentDao mAsyncTaskDao;
 
         deleteAppointmentAsyncTask(AppointmentDao dao) {
             mAsyncTaskDao = dao;
