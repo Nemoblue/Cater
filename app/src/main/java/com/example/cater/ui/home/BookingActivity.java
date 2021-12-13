@@ -2,13 +2,11 @@ package com.example.cater.ui.home;
 
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -17,8 +15,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.cater.R;
 import com.example.cater.appointment.Appointment;
 import com.example.cater.appointment.AppointmentViewModel;
-import com.example.cater.profile.Profile;
-import com.example.cater.profile.ProfileViewModel;
 import com.example.cater.tools.BasisTimesUtils;
 
 import java.util.List;
@@ -37,7 +33,7 @@ public class BookingActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_boooking);
+        setContentView(R.layout.activity_booking);
 
         restaurantBean = (RestaurantBean) getIntent().getSerializableExtra("restaurant");
 
