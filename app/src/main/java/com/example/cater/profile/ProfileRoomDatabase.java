@@ -35,7 +35,7 @@ public abstract class ProfileRoomDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    private static RoomDatabase.Callback sRoomDatabaseCallback =
+    private static final RoomDatabase.Callback sRoomDatabaseCallback =
             new RoomDatabase.Callback() {
 
                 @Override
@@ -46,7 +46,6 @@ public abstract class ProfileRoomDatabase extends RoomDatabase {
             };
 
     /**
-     * TODO: This function only for test cases. Initialization of the database need further work.
      * Populate the database in the background.
      */
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
@@ -61,7 +60,7 @@ public abstract class ProfileRoomDatabase extends RoomDatabase {
 
         @Override
         protected Void doInBackground(final Void... params) {
-            // TODO: IF need to delete all the database, use the following line.
+            // IF need to delete all the database, use the following line.
             //mDao.deleteAll();
             // If we have no profiles, then create the initial list of profiles
             if (mDao.getAnyProfile().length < 1) {

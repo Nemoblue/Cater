@@ -7,10 +7,8 @@ import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 
-import java.util.List;
-
 public class LoginRepository {
-    private LoginDao mLoginDao;
+    private final LoginDao mLoginDao;
     private LiveData<Login> mLogin;
 
     public LoginRepository(@NonNull Application application) {
@@ -42,7 +40,7 @@ public class LoginRepository {
     public Login[] getAnyLogin() { return mLoginDao.getAnyLogin(); }
 
     private static class insertAsyncTask extends AsyncTask<Login, Void, Void> {
-        private LoginDao mAsyncTaskDao;
+        private final LoginDao mAsyncTaskDao;
 
         insertAsyncTask(LoginDao dao) {
             mAsyncTaskDao = dao;
@@ -56,7 +54,7 @@ public class LoginRepository {
     }
 
     private static class deleteAllLoginsAsyncTask extends AsyncTask<Void, Void, Void> {
-        private LoginDao mAsyncTaskDao;
+        private final LoginDao mAsyncTaskDao;
 
         deleteAllLoginsAsyncTask(LoginDao dao) {
             mAsyncTaskDao = dao;
@@ -70,7 +68,7 @@ public class LoginRepository {
     }
 
     private static class deleteLoginAsyncTask extends AsyncTask<Login, Void, Void> {
-        private LoginDao mAsyncTaskDao;
+        private final LoginDao mAsyncTaskDao;
 
         deleteLoginAsyncTask(LoginDao dao) {
             mAsyncTaskDao = dao;

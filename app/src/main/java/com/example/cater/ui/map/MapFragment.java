@@ -1,9 +1,9 @@
 package com.example.cater.ui.map;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -54,8 +54,6 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     LatLng hkust = new LatLng(22.33653, 114.26363);
     private static final int REQUEST_LOCATION_PERMISSION = 1;
 
-    // Variables for the sample fragment
-    private final int mSampleSize = 5;
     private List<Profile> mProfiles;
     private final List<Marker> mSampleMarker = new ArrayList<>();
     private List<Integer> mSampleList = new ArrayList<>();
@@ -178,6 +176,8 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
             Random rand = new Random();
             List<Integer> sampleList = new ArrayList<>();
             int profile_size = mProfiles.size();
+            // Variables for the sample fragment
+            int mSampleSize = 5;
             int sample_size = Math.min(mSampleSize, profile_size);
 
 
@@ -274,6 +274,7 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         inflater.inflate(R.menu.map_options, menu);
     }
 
+    @SuppressLint("NonConstantResourceId")
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Change the map type based on the user's selection.

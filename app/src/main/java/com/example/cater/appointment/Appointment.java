@@ -1,13 +1,9 @@
 package com.example.cater.appointment;
 
-import android.text.format.Time;
-
 import androidx.annotation.NonNull;
 import androidx.room.ColumnInfo;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
-
-import com.example.cater.profile.Profile;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -42,13 +38,13 @@ public class Appointment implements Serializable {
     }
 
     public static class Builder {
-        private int aid;
-        private int cid;
-        private int uid;
+        private final int aid;
+        private final int cid;
+        private final int uid;
         private String uName = null;
         private String uPhoto = null;
-        private String appoint_Date;
-        private String target_date;
+        private final String appoint_Date;
+        private final String target_date;
 
         public Builder (int aid, int cid, int uid,
                         @NonNull Date appoint_Date, @NonNull Date target_date) {

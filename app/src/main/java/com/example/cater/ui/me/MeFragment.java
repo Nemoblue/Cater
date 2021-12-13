@@ -3,9 +3,13 @@ package com.example.cater.ui.me;
 
 import static java.lang.Integer.parseInt;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
+import android.location.Location;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -15,8 +19,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
@@ -25,14 +32,21 @@ import com.bumptech.glide.Glide;
 import com.example.cater.R;
 import com.example.cater.databinding.FragmentMeBinding;
 import com.example.cater.profile.Profile;
-import com.example.cater.profile.ProfileRepository;
 import com.example.cater.profile.ProfileViewModel;
 import com.example.cater.ui.login.LoginActivity;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.Locale;
+import java.util.Objects;
 
 public class MeFragment extends Fragment {
+
+    private static final int REQUEST_LOCATION_PERMISSION = 1;
+    private FusedLocationProviderClient mFusedLocationClient;
+    private Location mLastLocation;
 
     private ProfileViewModel mProfileViewModel;
     private Profile mProfile;
@@ -71,6 +85,7 @@ public class MeFragment extends Fragment {
                 .age(18)
                 .builder();
 
+        mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
         mProfileViewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel.class);
         mProfileViewModel.getProfile().observe(requireActivity(), new Observer<Profile>() {
             @Override
@@ -87,9 +102,9 @@ public class MeFragment extends Fragment {
                     icon_count = 0;
                 else
                     icon_count++;
-                TypedArray profilePhotoResources =
+                @SuppressLint("Recycle") TypedArray profilePhotoResources =
                         getResources().obtainTypedArray(R.array.profile_photos);
-                Glide.with(getContext()).load(profilePhotoResources.getResourceId(icon_count, 0)).into(user_icon);
+                Glide.with(requireContext()).load(profilePhotoResources.getResourceId(icon_count, 0)).into(user_icon);
             }
         });
 
@@ -116,15 +131,13 @@ public class MeFragment extends Fragment {
                     user_name.setInputType(InputType.TYPE_CLASS_TEXT);
                     user_age.setInputType(InputType.TYPE_CLASS_NUMBER);
                     user_description.setInputType(InputType.TYPE_CLASS_TEXT);
-                    //user_tag.setInputType(InputType.TYPE_CLASS_TEXT);
                 } else {
-                    Log.d(MeFragment.class.toString(), "enter save function");
+                    enableLocation();
                     set_button.setText(R.string.setting);
                     user_icon.setEnabled(false);
                     user_name.setInputType(InputType.TYPE_NULL);
                     user_age.setInputType(InputType.TYPE_NULL);
                     user_description.setInputType(InputType.TYPE_NULL);
-                    //user_tag.setInputType(InputType.TYPE_NULL);
                     Profile profile = new Profile.Builder(mProfile.getUid(), mProfile.getuPhone())
                             .age(parseInt(user_age.getText().toString()))
                             .name(user_name.getText().toString())
@@ -132,6 +145,11 @@ public class MeFragment extends Fragment {
                             .photo(String.format(Locale.getDefault(),
                                     "default_%d", icon_count))
                             .builder();
+                    if (mLastLocation != null) {
+                        Log.d("map", "check point");
+                        profile.setLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                        profile.setActive(true);
+                    }
                     mProfile = profile;
                     setUI(profile);
                     mProfileViewModel.insert(profile);
@@ -141,37 +159,8 @@ public class MeFragment extends Fragment {
         return root;
     }
 
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
-            android.net.Uri uri = data.getData();
-            user_icon.setImageURI(uri);
-        }
-
-        if (requestCode == LOGIN_REQUEST && resultCode == Activity.RESULT_OK) {
-            int result = data.getIntExtra(LoginActivity.EXTRA_REPLY, 0);
-            mProfileViewModel.getProfileByID(result).observe(requireActivity(), new Observer<Profile>() {
-                @Override
-                public void onChanged(Profile profile) {
-                    if (profile != null) {
-                        mProfile = profile;
-                        setUI(mProfile);
-                    }
-                }
-            });
-            login.setText(R.string.logout);
-        }
-    }
-
     public void setUI(Profile profile) {
         user_name.setText(profile.getuName());
-        //user_tag.setText(profile.getTag());
         user_description.setText(profile.getDescription());
         if (profile.getUid() != -1) {
             user_age.setText(String.valueOf(profile.getAge()));
@@ -201,15 +190,82 @@ public class MeFragment extends Fragment {
                     int index = parseInt(photoPath.substring(photoPath.length() - 1));
                     TypedArray profilePhotoResources =
                             getResources().obtainTypedArray(R.array.profile_photos);
-                    Glide.with(getContext()).load(profilePhotoResources.getResourceId(index, 0)).into(user_icon);
-                    Glide.with(getContext()).load(profilePhotoResources.getResourceId(index, 0)).into(header_icon);
+                    Glide.with(requireContext()).load(profilePhotoResources.getResourceId(index, 0)).into(user_icon);
+                    Glide.with(requireContext()).load(profilePhotoResources.getResourceId(index, 0)).into(header_icon);
                     icon_count = index;
                     profilePhotoResources.recycle();
                 }
             } else {
-                Glide.with(getContext()).load(R.drawable.ic_menu_home).into(user_icon);
-                Glide.with(getContext()).load(R.mipmap.ic_launcher_round).into(header_icon);
+                Glide.with(requireContext()).load(R.drawable.ic_menu_home).into(user_icon);
+                Glide.with(requireContext()).load(R.mipmap.ic_launcher_round).into(header_icon);
             }
         } catch (Exception ignore) {}
+    }
+
+    private void enableLocation() {
+            if (ContextCompat.checkSelfPermission(requireContext(),
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    == PackageManager.PERMISSION_GRANTED) {
+                mFusedLocationClient.getLastLocation().addOnSuccessListener(
+                        new OnSuccessListener<Location>() {
+                            @Override
+                            public void onSuccess(Location location) {
+                                mLastLocation = location;
+                            }
+                        }
+                );
+            } else {
+                ActivityCompat.requestPermissions(requireActivity(), new String[]
+                                {Manifest.permission.ACCESS_FINE_LOCATION},
+                        REQUEST_LOCATION_PERMISSION);
+            }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
+        // Check if location permissions are granted and if so enable the
+        // location data layer.
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_LOCATION_PERMISSION) {
+            if (grantResults.length > 0
+                    && grantResults[0]
+                    == PackageManager.PERMISSION_GRANTED) {
+                enableLocation();
+            } else {
+                Toast.makeText(requireContext(), "Location Permission Denied.",
+                        Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == PICK_IMAGE && resultCode == Activity.RESULT_OK) {
+            android.net.Uri uri = data.getData();
+            user_icon.setImageURI(uri);
+        }
+
+        if (requestCode == LOGIN_REQUEST && resultCode == Activity.RESULT_OK) {
+            int result = data.getIntExtra(LoginActivity.EXTRA_REPLY, 0);
+
+            mProfileViewModel.getProfileByID(result).observe(requireActivity(), new Observer<Profile>() {
+                @Override
+                public void onChanged(Profile profile) {
+                    if (profile != null) {
+                        mProfile = profile;
+                        setUI(mProfile);
+                    }
+                }
+            });
+            login.setText(R.string.logout);
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
 }

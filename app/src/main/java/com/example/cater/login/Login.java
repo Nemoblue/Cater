@@ -10,22 +10,24 @@ public class Login {
     @NonNull
     @PrimaryKey
     @ColumnInfo(name = "phone")
-    private String phone;
+    private final String phone;
 
     @NonNull
     @ColumnInfo(name = "password")
     private String password;
 
     @ColumnInfo(name = "uid")
-    private int uid;
+    private final int uid;
 
-    public Login(int uid, String phone, String password) {
+    public Login(int uid, @NonNull String phone, @NonNull String password) {
         this.uid = uid;
         this.phone = phone;
         this.password = password;
     }
 
+    @NonNull
     public String getPhone() {return this.phone;}
+    @NonNull
     public String getPassword() {return this.password;}
     public int getUid() {return this.uid;}
 }

@@ -63,7 +63,6 @@
     <string name="setting">Edit Profile</string>
     <string name="save">save</string>
     <string name="logout">logout</string>
-    <string name="default_login_name">Not Login</string>
 
     <string-array name="phone_array" >
         <item>+852</item>
