@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -37,6 +38,7 @@ import com.example.cater.profile.ProfileViewModel;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
+
 
 public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -95,6 +97,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         registerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                enableLocation();
                 mPhone = mPhonePrefix + phoneEditText.getText().toString();
                 mPassword = passwordEditText.getText().toString();
                 new RegisterAsyncTask(profileViewModel, loginRepository).execute(
