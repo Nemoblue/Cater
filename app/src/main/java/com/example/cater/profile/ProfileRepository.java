@@ -37,6 +37,8 @@ public class ProfileRepository {
         new deleteProfileAsyncTask(mProfileDao).execute(profile);
     }
 
+    public Profile[] getAnyProfile() { return mProfileDao.getAnyProfile(); }
+
     private static class insertAsyncTask extends AsyncTask<Profile, Void, Void> {
         private ProfileDao mAsyncTaskDao;
 

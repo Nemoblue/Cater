@@ -6,11 +6,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -24,6 +24,8 @@ import com.example.cater.R;
 import com.example.cater.databinding.ActivityLoginBinding;
 import com.example.cater.profile.Profile;
 import com.example.cater.profile.ProfileViewModel;
+
+import java.lang.ref.WeakReference;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -48,7 +50,6 @@ public class LoginActivity extends AppCompatActivity {
         final EditText passwordEditText = binding.password;
         final Button loginButton = binding.login;
         final Button registerButton = binding.register;
-        final ProgressBar loadingProgressBar = binding.loading;
 
         loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
             @Override
@@ -57,6 +58,7 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
                 loginButton.setEnabled(loginFormState.isDataValid());
+                registerButton.setEnabled(loginFormState.isDataValid());
                 if (loginFormState.getUsernameError() != null) {
                     usernameEditText.setError(getString(loginFormState.getUsernameError()));
                 }
@@ -66,26 +68,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
-        /*loginViewModel.getLoginResult().observe(this, new Observer<LoginResult>() {
-            @Override
-            public void onChanged(@Nullable LoginResult loginResult) {
-                if (loginResult == null) {
-                    return;
-                }
-                loadingProgressBar.setVisibility(View.GONE);
-                if (loginResult.getError() != null) {
-                    showLoginFailed(loginResult.getError());
-                }
-                if (loginResult.getSuccess() != null) {
-                    updateUiWithUser(loginResult.getSuccess());
-                }
-                setResult(Activity.RESULT_OK);
-
-                //Complete and destroy login activity once successful
-                finish();
-            }
-        });
-*/
         TextWatcher afterTextChangedListener = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -105,22 +87,10 @@ public class LoginActivity extends AppCompatActivity {
         };
         usernameEditText.addTextChangedListener(afterTextChangedListener);
         passwordEditText.addTextChangedListener(afterTextChangedListener);
-       /* passwordEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
 
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if (actionId == EditorInfo.IME_ACTION_DONE) {
-                    loginViewModel.login(usernameEditText.getText().toString(),
-                            passwordEditText.getText().toString());
-                }
-                return false;
-            }
-        });
-        */
         loginButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //loadingProgressBar.setVisibility(View.VISIBLE);
                 new loginAsyncTask(profileViewModel, passwordEditText).execute(usernameEditText.getText().toString(),
                         passwordEditText.getText().toString());
             }
@@ -135,12 +105,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-  /*  private void updateUiWithUser(LoggedInUserView model) {
-        String welcome = getString(R.string.welcome) + model.getDisplayName();
-        // TODO : initiate successful logged in experience
-        Toast.makeText(getApplicationContext(), welcome, Toast.LENGTH_LONG).show();
-    }
-*/
     private void showLoginFailed(@StringRes Integer errorString) {
         Toast.makeText(getApplicationContext(), errorString, Toast.LENGTH_SHORT).show();
     }
@@ -148,18 +112,29 @@ public class LoginActivity extends AppCompatActivity {
     private  class loginAsyncTask extends AsyncTask<String, Void, Integer> {
 
         private ProfileViewModel mAsyncTaskViewModel;
-        private EditText passwordText;
+        private WeakReference<EditText> passwordText;
         loginAsyncTask(ProfileViewModel model, EditText text) {
             mAsyncTaskViewModel = model;
-            passwordText = text;
+            passwordText = new WeakReference<>(text);
         }
 
         @Override
-        protected Integer doInBackground(String... strings) {
-            return mAsyncTaskViewModel.login(strings[0], strings[1]);
+        protected Integer doInBackground(String... params) {
+
+            Profile[] profiles = mAsyncTaskViewModel.getAnyProfile();
+            if (profiles == null) {
+                Log.d(LoginActivity.class.toString(), "Profiles are null");
+            } else {
+                for (int i = 0; i < profiles.length; i++) {
+                    Log.d(LoginActivity.class.toString(), profiles[i].getuPhone());
+                }
+            }
+            return mAsyncTaskViewModel.login(params[0], params[1]);
         }
 
         protected void onPostExecute(Integer result) {
+            Log.d(LoginActivity.class.toString(), result.toString().concat("this is current uid"));
+
             if(result == 0) {
                 View view = LoginActivity.this.getCurrentFocus();
                 if (view != null) {
@@ -167,8 +142,7 @@ public class LoginActivity extends AppCompatActivity {
                     imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
                 showLoginFailed(R.string.login_failed);
-                passwordText.getText().clear();
-                loginViewModel.login("dump","dump",false);
+                passwordText.get().getText().clear();
             } else {
                replyMe(result);
             }
@@ -185,8 +159,13 @@ public class LoginActivity extends AppCompatActivity {
         @Override
         protected Integer doInBackground(String... strings) {
             int new_id = mAsyncTaskViewModel.getIdCount();
+            Log.d(LoginActivity.class.toString(), String.valueOf(new_id));
             Profile profile = new Profile
                     .Builder(new_id, strings[0], strings[1])
+                    .name("")
+                    .description("Please put your description here")
+                    .photo("default_1")
+                    .age(0)
                     .builder();
 
             mAsyncTaskViewModel.insert(profile);
