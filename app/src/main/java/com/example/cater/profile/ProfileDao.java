@@ -30,12 +30,9 @@ public interface ProfileDao {
     @Query("SELECT * FROM profile_table WHERE uid = :uid")
     LiveData<Profile> getProfileByID(int uid);
 
-    @Query("SELECT * FROM profile_table LIMIT 8")
+    @Query("SELECT * FROM profile_table LIMIT 1")
     Profile[] getAnyProfile();
 
-    @Query("SELECT uid FROM profile_table WHERE phone = :phone AND password = :password")
-    int getUidByLogin(String phone, String password);
-
     @Query("SELECT COUNT(uid) FROM profile_table")
-    int getIdCount();
+    int getTotalCount();
 }

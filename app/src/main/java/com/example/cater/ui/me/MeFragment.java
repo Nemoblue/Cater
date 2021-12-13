@@ -25,6 +25,7 @@ import com.bumptech.glide.Glide;
 import com.example.cater.R;
 import com.example.cater.databinding.FragmentMeBinding;
 import com.example.cater.profile.Profile;
+import com.example.cater.profile.ProfileRepository;
 import com.example.cater.profile.ProfileViewModel;
 import com.example.cater.ui.login.LoginActivity;
 import com.google.android.material.navigation.NavigationView;
@@ -45,7 +46,6 @@ public class MeFragment extends Fragment {
     private TextView user_name;
     private TextView user_id;
     private TextView user_age;
-    private TextView user_tag;
     private TextView user_description;
 
     public static final int PICK_IMAGE = 1;
@@ -60,19 +60,16 @@ public class MeFragment extends Fragment {
         user_icon = root.findViewById(R.id.user_icon);
         user_icon.setEnabled(false);
         user_name = root.findViewById(R.id.user_name);
-        user_tag = root.findViewById(R.id.user_tag);
         user_description = root.findViewById(R.id.user_description);
         user_age = root.findViewById(R.id.user_age);
         login = root.findViewById(R.id.login_button);
         set_button = root.findViewById(R.id.setting_button);
 
-        zero_profile = new Profile.Builder(0,"00000000000","123456")
-                .name("")
+        zero_profile = new Profile.Builder(0, "00000000000")
+                .name(" ")
                 .description("Description")
                 .age(18)
-                .tag("Tag")
                 .builder();
-
 
         mProfileViewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel.class);
         mProfileViewModel.getProfile().observe(requireActivity(), new Observer<Profile>() {
@@ -86,31 +83,27 @@ public class MeFragment extends Fragment {
         user_icon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(icon_count == 7)
+                if (icon_count == 7)
                     icon_count = 0;
                 else
                     icon_count++;
                 TypedArray profilePhotoResources =
                         getResources().obtainTypedArray(R.array.profile_photos);
                 Glide.with(getContext()).load(profilePhotoResources.getResourceId(icon_count, 0)).into(user_icon);
-
-//                Intent intent = new Intent();
-//                intent.setType("image/*");
-//                intent.setAction(Intent.ACTION_GET_CONTENT);
-//                startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE);
             }
         });
 
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(login.getText().toString().equals(getString(R.string.button_login_register))) {
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivityForResult(intent, LOGIN_REQUEST);
+                if (login.getText().toString().equals(getString(R.string.button_login_register))) {
+                    Intent intent = new Intent(getActivity(), LoginActivity.class);
+                    startActivityForResult(intent, LOGIN_REQUEST);
                 } else {
-                        mProfile = zero_profile;
-                        mProfileViewModel.logout();
-                        setUI(mProfile);
+                    mProfile = zero_profile;
+                    mProfileViewModel.logout();
+                    Glide.with(getContext()).load(R.drawable.ic_menu_home).into(user_icon);
+                    setUI(mProfile);
                 }
             }
         });
@@ -118,7 +111,7 @@ public class MeFragment extends Fragment {
         set_button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(set_button.getText().toString().equals(getString(R.string.setting))) {
+                if (set_button.getText().toString().equals(getString(R.string.setting))) {
                     set_button.setText(R.string.save);
                     user_icon.setEnabled(true);
                     user_name.setInputType(InputType.TYPE_CLASS_TEXT);
@@ -133,7 +126,7 @@ public class MeFragment extends Fragment {
                     user_age.setInputType(InputType.TYPE_NULL);
                     user_description.setInputType(InputType.TYPE_NULL);
                     //user_tag.setInputType(InputType.TYPE_NULL);
-                    Profile profile = new Profile.Builder(mProfile.getUid(), mProfile.getuPhone(), mProfile.getPassword())
+                    Profile profile = new Profile.Builder(mProfile.getUid(), mProfile.getuPhone())
                             .age(parseInt(user_age.getText().toString()))
                             .name(user_name.getText().toString())
                             .description(user_description.getText().toString())
@@ -168,8 +161,10 @@ public class MeFragment extends Fragment {
             mProfileViewModel.getProfileByID(result).observe(requireActivity(), new Observer<Profile>() {
                 @Override
                 public void onChanged(Profile profile) {
-                    mProfile = profile;
-                    setUI(mProfile);
+                    if (profile != null) {
+                        mProfile = profile;
+                        setUI(mProfile);
+                    }
                 }
             });
             login.setText(R.string.logout);
@@ -180,7 +175,7 @@ public class MeFragment extends Fragment {
         user_name.setText(profile.getuName());
         //user_tag.setText(profile.getTag());
         user_description.setText(profile.getDescription());
-        if(profile.getUid() != 0) {
+        if (profile.getUid() != 0) {
             user_age.setText(String.valueOf(profile.getAge()));
             user_id.setText(String.valueOf(profile.getUid()));
             set_button.setVisibility(View.VISIBLE);
@@ -190,29 +185,32 @@ public class MeFragment extends Fragment {
             user_age.setText("");
             set_button.setVisibility(View.INVISIBLE);
             login.setText(R.string.button_login_register);
-            Glide.with(getContext()).load(R.drawable.ic_menu_home).into(user_icon);
+            //Glide.with(getContext()).load(R.drawable.ic_menu_home).into(user_icon);
         }
-        NavigationView navigationView = requireActivity().findViewById(R.id.nav_view);
-        View header_layout = navigationView.getHeaderView(0);
-        TextView header_name = header_layout.findViewById(R.id.nav_name);
-        TextView header_description = header_layout.findViewById(R.id.nav_description);
-        ImageView header_icon = header_layout.findViewById(R.id.nav_image_view);
 
-        header_name.setText(profile.getuName());
-        header_description.setText(profile.getDescription());
+        try {
+            NavigationView navigationView = requireActivity().findViewById(R.id.nav_view);
+            View header_layout = navigationView.getHeaderView(0);
+            TextView header_name = header_layout.findViewById(R.id.nav_name);
+            TextView header_description = header_layout.findViewById(R.id.nav_description);
+            ImageView header_icon = header_layout.findViewById(R.id.nav_image_view);
 
-        if (profile.getPhoto() != null) {
-            String photoPath = profile.getPhoto();
-            if (photoPath.startsWith("default")) {
-                int index = parseInt(photoPath.substring(photoPath.length() - 1));
-                TypedArray profilePhotoResources =
-                        getResources().obtainTypedArray(R.array.profile_photos);
-                Glide.with(getContext()).load(profilePhotoResources.getResourceId(index, 0)).into(user_icon);
-                Glide.with(getContext()).load(profilePhotoResources.getResourceId(index, 0)).into(header_icon);
-                icon_count = index;
-                profilePhotoResources.recycle();
+            header_name.setText(profile.getuName());
+            header_description.setText(profile.getDescription());
+
+            if (profile.getPhoto() != null) {
+                String photoPath = profile.getPhoto();
+                if (photoPath.startsWith("default")) {
+                    int index = parseInt(photoPath.substring(photoPath.length() - 1));
+                    TypedArray profilePhotoResources =
+                            getResources().obtainTypedArray(R.array.profile_photos);
+                    Glide.with(getContext()).load(profilePhotoResources.getResourceId(index, 0)).into(user_icon);
+                    Glide.with(getContext()).load(profilePhotoResources.getResourceId(index, 0)).into(header_icon);
+                    icon_count = index;
+                    profilePhotoResources.recycle();
+                }
             }
-        }
+        } catch (Exception ignore) {}
     }
     //todo setting things should be update to database, register not implemented, login failure not implemented....kill programs need to save profile...
 }

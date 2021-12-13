@@ -50,18 +50,23 @@
     <string name="user_tag">Tag</string>
     <string name="user_description">Description</string>
     <string name="title_activity_login">Login</string>
-    <string name="prompt_email">Phone number</string>
-    <string name="prompt_password">Password</string>
+    <string name="prompt_phone">Enter phone</string>
+    <string name="prompt_password">Enter Password</string>
     <string name="action_sign_in">Sign in</string>
     <string name="action_sign_in_short">Sign in</string>
     <string name="welcome">"Welcome !"</string>
-    <string name="invalid_username">Not a valid username</string>
+    <string name="invalid_username">Not a valid phone number</string>
     <string name="invalid_password">Password must be >5 characters</string>
-    <string name="login_failed">"Login failed"</string>
+    <string name="login_failed">"Login failed! Please check the phone number or password."</string>
     <string name="button_login_register">Login/Register</string>
     <string name="register">Register</string>
-    <string name="setting">setting</string>
+    <string name="setting">Edit Profile</string>
     <string name="save">save</string>
     <string name="logout">logout</string>
+
+    <string-array name="phone_array" >
+        <item>+852</item>
+        <item>+86</item>
+    </string-array>
 
 </resources>

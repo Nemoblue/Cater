@@ -21,9 +21,7 @@ public class ProfileRepository {
 
     LiveData<Profile> getProfileByID(int uid) { return mProfileDao.getProfileByID(uid); }
 
-    int getUidByLogin(String name, String password) { return mProfileDao.getUidByLogin(name, password); }
-
-    int getIdCount() { return mProfileDao.getIdCount(); }
+    int getTotalCount() { return mProfileDao.getTotalCount(); }
 
     public void deleteAll() {
         new deleteAllProfilesAsyncTask(mProfileDao).execute();
@@ -36,8 +34,6 @@ public class ProfileRepository {
     public void deleteProfile(Profile profile) {
         new deleteProfileAsyncTask(mProfileDao).execute(profile);
     }
-
-    public Profile[] getAnyProfile() { return mProfileDao.getAnyProfile(); }
 
     private static class insertAsyncTask extends AsyncTask<Profile, Void, Void> {
         private ProfileDao mAsyncTaskDao;
