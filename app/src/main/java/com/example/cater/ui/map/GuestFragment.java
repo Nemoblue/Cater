@@ -1,14 +1,10 @@
 package com.example.cater.ui.map;
 
-import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.Settings;
-import android.telephony.SmsManager;
-import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,22 +14,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
-import com.example.cater.MainActivity;
 import com.example.cater.R;
 import com.example.cater.profile.Profile;
 
 import java.net.URLEncoder;
-import java.util.Objects;
 
 public class GuestFragment extends Fragment {
     private static final String PROFILE = "profile";
-    private static final int MY_PERMISSIONS_REQUEST_CALL_PHONE = 1;
-    private Profile mProfile;
     private String mPhone;
 
     public GuestFragment() {
@@ -93,7 +83,7 @@ public class GuestFragment extends Fragment {
 
         assert getArguments() != null;
         if (getArguments().containsKey(PROFILE)) {
-            mProfile = (Profile) getArguments().getSerializable(PROFILE);
+            Profile mProfile = (Profile) getArguments().getSerializable(PROFILE);
 
             if (mProfile != null) {
                 mPhone = mProfile.getuPhone();
@@ -107,7 +97,7 @@ public class GuestFragment extends Fragment {
                         int index = Integer.parseInt(photoPath.substring(photoPath.length() - 1));
                         TypedArray profilePhotoResources =
                                 getResources().obtainTypedArray(R.array.profile_photos);
-                        Glide.with(getContext()).load(profilePhotoResources.getResourceId(index, 0)).into(guestPhoto);
+                        Glide.with(requireContext()).load(profilePhotoResources.getResourceId(index, 0)).into(guestPhoto);
 
                         profilePhotoResources.recycle();
                     }

@@ -8,8 +8,8 @@ import androidx.lifecycle.LiveData;
 import java.util.List;
 
 public class ProfileRepository {
-    private ProfileDao mProfileDao;
-    private LiveData<List<Profile>> mActiveProfiles;
+    private final ProfileDao mProfileDao;
+    private final LiveData<List<Profile>> mActiveProfiles;
 
     ProfileRepository(Application application) {
         ProfileRoomDatabase db = ProfileRoomDatabase.getDatabase(application);
@@ -36,7 +36,7 @@ public class ProfileRepository {
     }
 
     private static class insertAsyncTask extends AsyncTask<Profile, Void, Void> {
-        private ProfileDao mAsyncTaskDao;
+        private final ProfileDao mAsyncTaskDao;
 
         insertAsyncTask(ProfileDao dao) {
             mAsyncTaskDao = dao;
@@ -50,7 +50,7 @@ public class ProfileRepository {
     }
 
     private static class deleteAllProfilesAsyncTask extends AsyncTask<Void, Void, Void> {
-        private ProfileDao mAsyncTaskDao;
+        private final ProfileDao mAsyncTaskDao;
 
         deleteAllProfilesAsyncTask(ProfileDao dao) {
             mAsyncTaskDao = dao;
@@ -64,7 +64,7 @@ public class ProfileRepository {
     }
 
     private static class deleteProfileAsyncTask extends AsyncTask<Profile, Void, Void> {
-        private ProfileDao mAsyncTaskDao;
+        private final ProfileDao mAsyncTaskDao;
 
         deleteProfileAsyncTask(ProfileDao dao) {
             mAsyncTaskDao = dao;

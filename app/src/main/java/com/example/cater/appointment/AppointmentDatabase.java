@@ -2,7 +2,6 @@ package com.example.cater.appointment;
 
 import android.content.Context;
 import android.os.AsyncTask;
-import android.text.format.Time;
 
 import androidx.annotation.NonNull;
 import androidx.room.Database;
@@ -38,7 +37,7 @@ public abstract class AppointmentDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    private static RoomDatabase.Callback sRoomDatabaseCallback =
+    private static final RoomDatabase.Callback sRoomDatabaseCallback =
             new RoomDatabase.Callback() {
 
                 @Override

@@ -9,8 +9,8 @@ import androidx.lifecycle.MutableLiveData;
 import java.util.List;
 
 public class ProfileViewModel extends AndroidViewModel {
-    private ProfileRepository mRepository;
-    private LiveData<List<Profile>> mActiveProfiles;
+    private final ProfileRepository mRepository;
+    private final LiveData<List<Profile>> mActiveProfiles;
     private LiveData<Profile> mProfile;
 
     public ProfileViewModel (Application application) {

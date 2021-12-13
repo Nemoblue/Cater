@@ -9,9 +9,9 @@ import java.io.Serializable;
 
 @Entity(tableName = "profile_table")
 public class Profile implements Serializable {
-    @PrimaryKey(autoGenerate = false)
+    @PrimaryKey
     @ColumnInfo(name = "uid")
-    private int uid;
+    private final int uid;
     @NonNull
     @ColumnInfo (name = "phone")
     protected String uPhone;
@@ -36,13 +36,13 @@ public class Profile implements Serializable {
     }
 
     public static class Builder {
-        private int uid;
-        private String uPhone;
+        private final int uid;
+        private final String uPhone;
         private String uName = null;
         private int uAge;
         private String uPhoto = null;
         private String uDescription = null;
-        private double[] uPosition = {22.33653,114.26363};
+        private final double[] uPosition = {22.33653,114.26363};
         private boolean uActive = true;
 
         public Builder(int uid, @NonNull String phone) {
@@ -108,6 +108,7 @@ public class Profile implements Serializable {
     public String getDescription() {return this.uDescription;}
     public double[] getPosition() { return new double[]{this.uLatitude, this.uLongitude};}
     public boolean isuActive() {return this.uActive;}
+    @NonNull
     public String getuPhone() {return this.uPhone;}
 
     public void setLocation(double latitude, double longitude) {

@@ -3,6 +3,7 @@ package com.example.cater.ui.me;
 
 import static java.lang.Integer.parseInt;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.res.TypedArray;
@@ -25,7 +26,6 @@ import com.bumptech.glide.Glide;
 import com.example.cater.R;
 import com.example.cater.databinding.FragmentMeBinding;
 import com.example.cater.profile.Profile;
-import com.example.cater.profile.ProfileRepository;
 import com.example.cater.profile.ProfileViewModel;
 import com.example.cater.ui.login.LoginActivity;
 import com.google.android.material.navigation.NavigationView;
@@ -87,9 +87,9 @@ public class MeFragment extends Fragment {
                     icon_count = 0;
                 else
                     icon_count++;
-                TypedArray profilePhotoResources =
+                @SuppressLint("Recycle") TypedArray profilePhotoResources =
                         getResources().obtainTypedArray(R.array.profile_photos);
-                Glide.with(getContext()).load(profilePhotoResources.getResourceId(icon_count, 0)).into(user_icon);
+                Glide.with(requireContext()).load(profilePhotoResources.getResourceId(icon_count, 0)).into(user_icon);
             }
         });
 
@@ -116,7 +116,6 @@ public class MeFragment extends Fragment {
                     user_name.setInputType(InputType.TYPE_CLASS_TEXT);
                     user_age.setInputType(InputType.TYPE_CLASS_NUMBER);
                     user_description.setInputType(InputType.TYPE_CLASS_TEXT);
-                    //user_tag.setInputType(InputType.TYPE_CLASS_TEXT);
                 } else {
                     Log.d(MeFragment.class.toString(), "enter save function");
                     set_button.setText(R.string.setting);
@@ -124,7 +123,6 @@ public class MeFragment extends Fragment {
                     user_name.setInputType(InputType.TYPE_NULL);
                     user_age.setInputType(InputType.TYPE_NULL);
                     user_description.setInputType(InputType.TYPE_NULL);
-                    //user_tag.setInputType(InputType.TYPE_NULL);
                     Profile profile = new Profile.Builder(mProfile.getUid(), mProfile.getuPhone())
                             .age(parseInt(user_age.getText().toString()))
                             .name(user_name.getText().toString())
@@ -171,7 +169,6 @@ public class MeFragment extends Fragment {
 
     public void setUI(Profile profile) {
         user_name.setText(profile.getuName());
-        //user_tag.setText(profile.getTag());
         user_description.setText(profile.getDescription());
         if (profile.getUid() != -1) {
             user_age.setText(String.valueOf(profile.getAge()));
@@ -201,14 +198,14 @@ public class MeFragment extends Fragment {
                     int index = parseInt(photoPath.substring(photoPath.length() - 1));
                     TypedArray profilePhotoResources =
                             getResources().obtainTypedArray(R.array.profile_photos);
-                    Glide.with(getContext()).load(profilePhotoResources.getResourceId(index, 0)).into(user_icon);
-                    Glide.with(getContext()).load(profilePhotoResources.getResourceId(index, 0)).into(header_icon);
+                    Glide.with(requireContext()).load(profilePhotoResources.getResourceId(index, 0)).into(user_icon);
+                    Glide.with(requireContext()).load(profilePhotoResources.getResourceId(index, 0)).into(header_icon);
                     icon_count = index;
                     profilePhotoResources.recycle();
                 }
             } else {
-                Glide.with(getContext()).load(R.drawable.ic_menu_home).into(user_icon);
-                Glide.with(getContext()).load(R.mipmap.ic_launcher_round).into(header_icon);
+                Glide.with(requireContext()).load(R.drawable.ic_menu_home).into(user_icon);
+                Glide.with(requireContext()).load(R.mipmap.ic_launcher_round).into(header_icon);
             }
         } catch (Exception ignore) {}
     }

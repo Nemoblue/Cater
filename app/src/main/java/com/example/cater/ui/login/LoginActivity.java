@@ -2,7 +2,6 @@ package com.example.cater.ui.login;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -23,16 +21,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.annotation.StringRes;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
-import com.example.cater.MainActivity;
 import com.example.cater.R;
 import com.example.cater.databinding.ActivityLoginBinding;
 import com.example.cater.login.Login;
@@ -42,10 +37,6 @@ import com.example.cater.profile.ProfileViewModel;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnSuccessListener;
-
-import java.lang.ref.WeakReference;
-import java.util.List;
-import java.util.Locale;
 
 public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
 
@@ -64,7 +55,6 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     private EditText phoneEditText;
     private EditText passwordEditText;
-    private Spinner phoneSpinner;
     private Button loginButton;
     private Button registerButton;
 
@@ -83,7 +73,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
         phoneEditText = binding.phone;
         passwordEditText = binding.password;
-        phoneSpinner = binding.phoneSpinner;
+        Spinner phoneSpinner = binding.phoneSpinner;
         loginButton = binding.login;
         registerButton = binding.register;
 
@@ -258,7 +248,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
 
     private void replyMe(int result) {
         Intent replyIntent = new Intent();
-        replyIntent.putExtra(EXTRA_REPLY, (int) result);
+        replyIntent.putExtra(EXTRA_REPLY, result);
         setResult(RESULT_OK, replyIntent);
         finish();
     }
