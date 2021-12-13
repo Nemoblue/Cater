@@ -9,9 +9,13 @@ import java.io.Serializable;
 
 @Entity(tableName = "profile_table")
 public class Profile implements Serializable {
-    @PrimaryKey
+    @PrimaryKey(autoGenerate = false)
     @ColumnInfo(name = "uid")
     private int uid;
+    @NonNull
+    @ColumnInfo (name = "phone")
+    protected String uPhone;
+
     @ColumnInfo(name = "name")
     protected String uName;
     @ColumnInfo(name = "age")
@@ -20,8 +24,6 @@ public class Profile implements Serializable {
     protected String uPhoto;
     @ColumnInfo(name = "description")
     protected String uDescription;
-    @ColumnInfo(name = "tag")
-    protected String uTag;
     @ColumnInfo(name = "latitude")
     protected double uLatitude;
     @ColumnInfo(name = "longitude")
@@ -29,34 +31,23 @@ public class Profile implements Serializable {
     @ColumnInfo(name = "active")
     protected boolean uActive;
 
-    @NonNull
-    @ColumnInfo (name = "phone")
-    protected String uPhone;
-    @NonNull
-    @ColumnInfo(name = "password")
-    protected String uPassword;
-
     public Profile(int uid) { this.uid = uid;
         uPhone = "Default Phone Number";
-        uPassword = "123456";
     }
 
     public static class Builder {
         private int uid;
+        private String uPhone;
         private String uName = null;
         private int uAge;
         private String uPhoto = null;
         private String uDescription = null;
-        private String uTag = null;
-        private double[] uPosition = {-1, -1};
+        private double[] uPosition = {22.33653,114.26363};
         private boolean uActive = true;
-        private String uPhone;
-        private String uPassword;
 
-        public Builder(int uid, @NonNull String phone, @NonNull String password) {
+        public Builder(int uid, @NonNull String phone) {
             this.uid = uid;
             this.uPhone = phone;
-            this.uPassword = password;
         }
 
         public Builder name(String name) {
@@ -79,11 +70,6 @@ public class Profile implements Serializable {
             return this;
         }
 
-        public Builder tag(String tag) {
-            uTag = tag;
-            return this;
-        }
-
         public Builder position(double latitude, double longitude) {
             uPosition[0] = latitude;
             uPosition[1] = longitude;
@@ -102,19 +88,17 @@ public class Profile implements Serializable {
 
     public Profile(Builder builder) {
         this.uid = builder.uid;
+        this.uPhone = builder.uPhone;
         if (builder.uName == null)
-            this.uName = builder.uPhone;
+            this.uName = "+" + builder.uPhone;
         else
             this.uName = builder.uName;
         this.uAge = builder.uAge;
         this.uPhoto = builder.uPhoto;
         this.uDescription = builder.uDescription;
-        this.uTag = builder.uTag;
         this.uLatitude = builder.uPosition[0];
         this.uLongitude = builder.uPosition[1];
         this.uActive = builder.uActive;
-        this.uPhone = builder.uPhone;
-        this.uPassword = builder.uPassword;
     }
 
     public int getUid() {return this.uid;}
@@ -122,9 +106,15 @@ public class Profile implements Serializable {
     public int getAge() {return this.uAge;}
     public String getPhoto() {return this.uPhoto;}
     public String getDescription() {return this.uDescription;}
-    public String getTag() {return this.uTag;}
     public double[] getPosition() { return new double[]{this.uLatitude, this.uLongitude};}
     public boolean isuActive() {return this.uActive;}
     public String getuPhone() {return this.uPhone;}
-    public String getPassword() {return this.uPassword;}
+
+    public void setLocation(double latitude, double longitude) {
+        this.uLatitude = latitude;
+        this.uLongitude = longitude;
+    }
+    public void setActive(boolean state) {
+        this.uActive = state;
+    }
 }

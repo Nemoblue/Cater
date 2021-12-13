@@ -21,6 +21,8 @@ public class ProfileViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Profile>> getActiveProfiles() {return mActiveProfiles;}
+    public int getTotalCount() { return mRepository.getTotalCount(); }
+
     public void insert(Profile profile) { mRepository.insert(profile); }
     public void deleteAll() {mRepository.deleteAll();}
     public void deleteProfile(Profile profile) {mRepository.deleteProfile(profile);}
@@ -39,15 +41,6 @@ public class ProfileViewModel extends AndroidViewModel {
         return mProfile;
     }
 
-    public int getUidByLogin(String name, String password) { return mRepository.getUidByLogin(name, password); }
-    public int getIdCount() { return mRepository.getIdCount(); }
-    public Profile[] getAnyProfile() { return mRepository.getAnyProfile(); }
-    public int login(String username, String password) {
-        int result = 0; //let jason to be default
-        result = getUidByLogin(username, password);
-
-        return result; //todo implement register situation
-    }
     public LiveData<Profile> logout() {
         mProfile = new MutableLiveData<>();
         return mProfile;

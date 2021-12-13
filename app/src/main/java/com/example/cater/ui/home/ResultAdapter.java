@@ -79,7 +79,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultVH> 
         notifyDataSetChanged();
     }
 
-    public class ResultVH extends RecyclerView.ViewHolder {
+    public static class ResultVH extends RecyclerView.ViewHolder {
         ImageView mIvHead;
         TextView mTvName;
         TextView mTvDesc;

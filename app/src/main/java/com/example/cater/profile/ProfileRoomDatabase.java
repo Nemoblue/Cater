@@ -11,7 +11,7 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import java.util.Locale;
 
-@Database(entities = {Profile.class}, version = 9, exportSchema = false)
+@Database(entities = {Profile.class}, version = 15, exportSchema = false)
 public abstract class ProfileRoomDatabase extends RoomDatabase {
     public abstract ProfileDao profileDao();
 
@@ -65,13 +65,13 @@ public abstract class ProfileRoomDatabase extends RoomDatabase {
             //mDao.deleteAll();
             // If we have no profiles, then create the initial list of profiles
             if (mDao.getAnyProfile().length < 1) {
-                for (int i = 0; i < names.length+1; i++) {
+                for (int i = 0; i < names.length; i++) {
                     String description = String.format(Locale.getDefault(),
                             "This is %s. Nice to see you!", names[i]);
                     String photo = String.format(Locale.getDefault(),
                             "default_%d", i+1);
                     Profile profile = new Profile
-                            .Builder(i,"85253002711","123456")
+                            .Builder(i,"85253002711")
                             .name(names[i])
                             .photo(photo)
                             .position((22.33653 + (Math.random() * 2 - 1) * 0.001)

@@ -10,10 +10,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.me.MeFragment">
-
-
-
-
         <ImageView
             android:id="@+id/user_icon"
             android:layout_width="138dp"
@@ -29,6 +25,7 @@
             android:id="@+id/user_name"
             android:layout_width="150dp"
             android:layout_height="48dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="45dp"
             android:background="@android:color/transparent"
             android:editable="false"
@@ -42,6 +39,7 @@
             android:id="@+id/user_id"
             android:layout_width="200dp"
             android:layout_height="48dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="32dp"
             android:background="@android:color/transparent"
             android:editable="false"
@@ -55,7 +53,6 @@
             android:layout_width="0dp"
             android:layout_height="48dp"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:background="@android:color/transparent"
             android:editable="false"
@@ -65,12 +62,13 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/user_tag" />
+            app:layout_constraintTop_toBottomOf="@+id/display_uid" />
 
         <EditText
             android:id="@+id/user_age"
             android:layout_width="150dp"
             android:layout_height="48dp"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="32dp"
             android:background="@android:color/transparent"
             android:editable="false"
@@ -78,23 +76,6 @@
             android:inputType="none"
             app:layout_constraintStart_toEndOf="@+id/display_age"
             app:layout_constraintTop_toBottomOf="@+id/user_name" />
-
-        <EditText
-            android:id="@+id/user_tag"
-            android:layout_width="0dp"
-            android:layout_height="48dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="16dp"
-            android:background="@android:color/transparent"
-            android:editable="false"
-            android:ems="10"
-            android:inputType="none"
-            android:text="@string/user_tag"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/user_id" />
 
         <Button
             android:id="@+id/login_button"
