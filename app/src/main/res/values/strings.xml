@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Cater</string>
     <string name="nav_header_title">Not Login</string>
-    <string name="nav_header_subtitle">Please login in at Me page.</string>
+    <string name="nav_header_subtitle">Please login in or register to continue.</string>
     <string name="nav_header_desc">Navigation header</string>
     <string name="action_settings">Settings</string>
 
@@ -48,7 +48,7 @@
     <string name="user_age">Age: </string>
     <string name="user_id">uid: </string>
     <string name="user_tag">Tag</string>
-    <string name="user_description">Description</string>
+    <string name="user_description">Please login in or register to continue</string>
     <string name="title_activity_login">Login</string>
     <string name="prompt_phone">Enter phone</string>
     <string name="prompt_password">Enter Password</string>
@@ -63,6 +63,7 @@
     <string name="setting">Edit Profile</string>
     <string name="save">save</string>
     <string name="logout">logout</string>
+    <string name="default_login_name">Not Login</string>
 
     <string-array name="phone_array" >
         <item>+852</item>

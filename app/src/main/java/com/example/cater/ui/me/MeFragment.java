@@ -65,7 +65,7 @@ public class MeFragment extends Fragment {
         login = root.findViewById(R.id.login_button);
         set_button = root.findViewById(R.id.setting_button);
 
-        zero_profile = new Profile.Builder(0, "00000000000")
+        zero_profile = new Profile.Builder(-1, "00000000000")
                 .name("Not Login")
                 .description("Please login in or register to continue.")
                 .age(18)
@@ -155,7 +155,6 @@ public class MeFragment extends Fragment {
         }
 
         if (requestCode == LOGIN_REQUEST && resultCode == Activity.RESULT_OK) {
-            Log.d(MeFragment.class.toString(), "enter onResult Login or register");
             int result = data.getIntExtra(LoginActivity.EXTRA_REPLY, 0);
             mProfileViewModel.getProfileByID(result).observe(requireActivity(), new Observer<Profile>() {
                 @Override
@@ -174,7 +173,7 @@ public class MeFragment extends Fragment {
         user_name.setText(profile.getuName());
         //user_tag.setText(profile.getTag());
         user_description.setText(profile.getDescription());
-        if (profile.getUid() != 0) {
+        if (profile.getUid() != -1) {
             user_age.setText(String.valueOf(profile.getAge()));
             user_id.setText(String.valueOf(profile.getUid()));
             set_button.setVisibility(View.VISIBLE);
@@ -184,7 +183,6 @@ public class MeFragment extends Fragment {
             user_age.setText("");
             set_button.setVisibility(View.INVISIBLE);
             login.setText(R.string.button_login_register);
-            //Glide.with(getContext()).load(R.drawable.ic_menu_home).into(user_icon);
         }
 
         try {
