@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021.   # COMP 4521 #
+ * # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+ * # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+ * # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+ */
+
 package com.example.cater.profile;
 
 import android.content.Context;
@@ -13,9 +20,16 @@ import java.util.Locale;
 
 @Database(entities = {Profile.class}, version = 15, exportSchema = false)
 public abstract class ProfileRoomDatabase extends RoomDatabase {
-    public abstract ProfileDao profileDao();
-
     private static ProfileRoomDatabase INSTANCE;
+    private static final RoomDatabase.Callback sRoomDatabaseCallback =
+            new RoomDatabase.Callback() {
+
+                @Override
+                public void onOpen(@NonNull SupportSQLiteDatabase db) {
+                    super.onOpen(db);
+                    new PopulateDbAsync(INSTANCE).execute();
+                }
+            };
 
     public static ProfileRoomDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
@@ -35,15 +49,7 @@ public abstract class ProfileRoomDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    private static final RoomDatabase.Callback sRoomDatabaseCallback =
-            new RoomDatabase.Callback() {
-
-                @Override
-                public void onOpen(@NonNull SupportSQLiteDatabase db) {
-                    super.onOpen(db);
-                    new PopulateDbAsync(INSTANCE).execute();
-                }
-            };
+    public abstract ProfileDao profileDao();
 
     /**
      * Populate the database in the background.
@@ -68,9 +74,9 @@ public abstract class ProfileRoomDatabase extends RoomDatabase {
                     String description = String.format(Locale.getDefault(),
                             "This is %s. Nice to see you!", names[i]);
                     String photo = String.format(Locale.getDefault(),
-                            "default_%d", i+1);
+                            "default_%d", i + 1);
                     Profile profile = new Profile
-                            .Builder(i,"85253002711")
+                            .Builder(i, "85253002711")
                             .name(names[i])
                             .photo(photo)
                             .position((22.33653 + (Math.random() * 2 - 1) * 0.001)

@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021.   # COMP 4521 #
+ * # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+ * # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+ * # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+ */
+
 package com.example.cater.login;
 
 import androidx.annotation.NonNull;
@@ -26,8 +33,16 @@ public class Login {
     }
 
     @NonNull
-    public String getPhone() {return this.phone;}
+    public String getPhone() {
+        return this.phone;
+    }
+
     @NonNull
-    public String getPassword() {return this.password;}
-    public int getUid() {return this.uid;}
+    public String getPassword() {
+        return this.password;
+    }
+
+    public int getUid() {
+        return this.uid;
+    }
 }

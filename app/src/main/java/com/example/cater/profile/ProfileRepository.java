@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021.   # COMP 4521 #
+ * # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+ * # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+ * # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+ */
+
 package com.example.cater.profile;
 
 import android.app.Application;
@@ -17,11 +24,17 @@ public class ProfileRepository {
         mActiveProfiles = mProfileDao.getActiveProfiles();
     }
 
-    LiveData<List<Profile>> getActiveProfiles() {return mActiveProfiles;}
+    LiveData<List<Profile>> getActiveProfiles() {
+        return mActiveProfiles;
+    }
 
-    LiveData<Profile> getProfileByID(int uid) { return mProfileDao.getProfileByID(uid); }
+    LiveData<Profile> getProfileByID(int uid) {
+        return mProfileDao.getProfileByID(uid);
+    }
 
-    int getTotalCount() { return mProfileDao.getTotalCount(); }
+    int getTotalCount() {
+        return mProfileDao.getTotalCount();
+    }
 
     public void deleteAll() {
         new deleteAllProfilesAsyncTask(mProfileDao).execute();

@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021.   # COMP 4521 #
+ * # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+ * # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+ * # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+ */
+
 package com.example.cater.appointment;
 
 import android.app.Application;
@@ -28,6 +35,7 @@ public class AppointmentRepository {
     LiveData<List<Appointment>> getAppointmentByTime(int canteen_id, Time time) {
         return mAppointmentDao.getAppointmentByTime(canteen_id, time.toString());
     }
+
     LiveData<Appointment> getAppointmentByID(int appoint_id) {
         return mAppointmentDao.getAppointmentByID(appoint_id);
     }

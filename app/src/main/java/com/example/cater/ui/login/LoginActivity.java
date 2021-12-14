@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021.   # COMP 4521 #
+ * # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+ * # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+ * # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+ */
+
 package com.example.cater.ui.login;
 
 import android.Manifest;
@@ -20,11 +27,9 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.lifecycle.ViewModelProviders;
 
@@ -36,7 +41,6 @@ import com.example.cater.profile.Profile;
 import com.example.cater.profile.ProfileViewModel;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 
 
 public class LoginActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
@@ -147,44 +151,6 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         });
     }
 
-    @SuppressLint("StaticFieldLeak")
-    private class RegisterAsyncTask extends AsyncTask<String, Void, Integer> {
-        private final ProfileViewModel profileViewModel;
-        private final LoginRepository loginRepository;
-
-        RegisterAsyncTask(ProfileViewModel model, LoginRepository login) {
-            profileViewModel = model;
-            loginRepository = login;
-        }
-
-        @Override
-        protected Integer doInBackground(String... params) {
-            int new_id = profileViewModel.getTotalCount();
-            Login login = new Login(new_id, params[0], params[1]);
-            loginRepository.insert(login);
-
-            Profile profile = new Profile
-                    .Builder(new_id, params[0])
-                    .name("+" + params[0])
-                    .description("Please put your description here")
-                    .age(18)
-                    .photo("default_1")
-                    .active(false)
-                    .builder();
-            if (mLastLocation != null) {
-                profile.setLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                profile.setActive(true);
-            }
-            profileViewModel.insert(profile);
-
-            return new_id;
-        }
-
-        protected void onPostExecute(Integer result) {
-            replyMe(result);
-        }
-    }
-
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         String label = adapterView.getItemAtPosition(i).toString();
@@ -234,5 +200,43 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
         replyIntent.putExtra(EXTRA_REPLY, result);
         setResult(RESULT_OK, replyIntent);
         finish();
+    }
+
+    @SuppressLint("StaticFieldLeak")
+    private class RegisterAsyncTask extends AsyncTask<String, Void, Integer> {
+        private final ProfileViewModel profileViewModel;
+        private final LoginRepository loginRepository;
+
+        RegisterAsyncTask(ProfileViewModel model, LoginRepository login) {
+            profileViewModel = model;
+            loginRepository = login;
+        }
+
+        @Override
+        protected Integer doInBackground(String... params) {
+            int new_id = profileViewModel.getTotalCount();
+            Login login = new Login(new_id, params[0], params[1]);
+            loginRepository.insert(login);
+
+            Profile profile = new Profile
+                    .Builder(new_id, params[0])
+                    .name("+" + params[0])
+                    .description("Please put your description here")
+                    .age(18)
+                    .photo("default_1")
+                    .active(false)
+                    .builder();
+            if (mLastLocation != null) {
+                profile.setLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                profile.setActive(true);
+            }
+            profileViewModel.insert(profile);
+
+            return new_id;
+        }
+
+        protected void onPostExecute(Integer result) {
+            replyMe(result);
+        }
     }
 }

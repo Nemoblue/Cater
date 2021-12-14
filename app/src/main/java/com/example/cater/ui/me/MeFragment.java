@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021.   # COMP 4521 #
+ * # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+ * # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+ * # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+ */
+
 package com.example.cater.ui.me;
 
 
@@ -41,16 +48,16 @@ import java.util.Locale;
 
 public class MeFragment extends Fragment {
 
+    public static final int PICK_IMAGE = 1;
+    public static final int LOGIN_REQUEST = 2;
     private static final int REQUEST_LOCATION_PERMISSION = 1;
     private FusedLocationProviderClient mFusedLocationClient;
     private Location mLastLocation;
-
     private ProfileViewModel mProfileViewModel;
     private Profile mProfile;
     private Profile zero_profile;
     private FragmentMeBinding binding;
     private int icon_count = 0;
-
     private ImageView user_icon;
     private Button login;
     private Button set_button;
@@ -58,9 +65,6 @@ public class MeFragment extends Fragment {
     private TextView user_id;
     private TextView user_age;
     private TextView user_description;
-
-    public static final int PICK_IMAGE = 1;
-    public static final int LOGIN_REQUEST = 2;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -184,21 +188,22 @@ public class MeFragment extends Fragment {
                 Glide.with(requireContext()).load(R.drawable.ic_menu_home).into(user_icon);
                 Glide.with(requireContext()).load(R.mipmap.ic_launcher_round).into(header_icon);
             }
-        } catch (Exception ignore) {}
+        } catch (Exception ignore) {
+        }
     }
 
     private void enableLocation() {
-            if (ContextCompat.checkSelfPermission(requireContext(),
-                    Manifest.permission.ACCESS_FINE_LOCATION)
-                    == PackageManager.PERMISSION_GRANTED) {
-                mFusedLocationClient.getLastLocation().addOnSuccessListener(
-                        location -> mLastLocation = location
-                );
-            } else {
-                ActivityCompat.requestPermissions(requireActivity(), new String[]
-                                {Manifest.permission.ACCESS_FINE_LOCATION},
-                        REQUEST_LOCATION_PERMISSION);
-            }
+        if (ContextCompat.checkSelfPermission(requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION)
+                == PackageManager.PERMISSION_GRANTED) {
+            mFusedLocationClient.getLastLocation().addOnSuccessListener(
+                    location -> mLastLocation = location
+            );
+        } else {
+            ActivityCompat.requestPermissions(requireActivity(), new String[]
+                            {Manifest.permission.ACCESS_FINE_LOCATION},
+                    REQUEST_LOCATION_PERMISSION);
+        }
     }
 
     @Override

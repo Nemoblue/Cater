@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021.   # COMP 4521 #
+ * # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+ * # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+ * # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+ */
+
 package com.example.cater.tools;
 
 import android.app.AlertDialog;
@@ -275,6 +282,52 @@ public class BasisTimesUtils {
     }
 
     /**
+     * 显示时间选择器
+     */
+    public static void showTimerPickerDialog(Context context, boolean themeLight, String title, int hourOfDay, int minute, boolean is24HourView, final OnTimerPickerListener onTimerPickerListener) {
+        int themeId = AlertDialog.THEME_HOLO_LIGHT;//默认白色背景
+        if (!themeLight) {
+            themeId = AlertDialog.THEME_HOLO_DARK;//黑色背景
+        }
+        showTimerPickerDialog(context, themeId, title, hourOfDay, minute, is24HourView, onTimerPickerListener);
+    }
+
+    /**
+     * 显示时间选择器, 默认白色背景
+     */
+    public static void showTimerPickerDialog(Context context, String title, int hourOfDay, int minute, boolean is24HourView, final OnTimerPickerListener onTimerPickerListener) {
+        showTimerPickerDialog(context, AlertDialog.THEME_HOLO_LIGHT, title, hourOfDay, minute, is24HourView, onTimerPickerListener);
+    }
+
+    /**
+     * 显示时间选择器
+     */
+    public static void showTimerPickerDialog(Context context, int themeId, String title, int hourOfDay, int minute, boolean is24HourView, final OnTimerPickerListener onTimerPickerListener) {
+        TimePickerDialog dialog = new TimePickerDialog(context, themeId, new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                if (onTimerPickerListener != null) {
+                    onTimerPickerListener.onConfirm(hourOfDay, minute);
+                }
+            }
+        }, hourOfDay, minute, is24HourView);
+
+        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+                if (onTimerPickerListener != null) {
+                    onTimerPickerListener.onCancel();
+                }
+            }
+        });
+
+        if (!TextUtils.isEmpty(title)) {
+            dialog.setTitle(title);
+        }
+        dialog.show();
+    }
+
+    /**
      * 隐藏年, 只显示月和日
      */
     public void setYearGone() {
@@ -323,52 +376,6 @@ public class BasisTimesUtils {
         } catch (Exception e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * 显示时间选择器
-     */
-    public static void showTimerPickerDialog(Context context, boolean themeLight, String title, int hourOfDay, int minute, boolean is24HourView, final OnTimerPickerListener onTimerPickerListener) {
-        int themeId = AlertDialog.THEME_HOLO_LIGHT;//默认白色背景
-        if (!themeLight) {
-            themeId = AlertDialog.THEME_HOLO_DARK;//黑色背景
-        }
-        showTimerPickerDialog(context, themeId, title, hourOfDay, minute, is24HourView, onTimerPickerListener);
-    }
-
-    /**
-     * 显示时间选择器, 默认白色背景
-     */
-    public static void showTimerPickerDialog(Context context, String title, int hourOfDay, int minute, boolean is24HourView, final OnTimerPickerListener onTimerPickerListener) {
-        showTimerPickerDialog(context, AlertDialog.THEME_HOLO_LIGHT, title, hourOfDay, minute, is24HourView, onTimerPickerListener);
-    }
-
-    /**
-     * 显示时间选择器
-     */
-    public static void showTimerPickerDialog(Context context, int themeId, String title, int hourOfDay, int minute, boolean is24HourView, final OnTimerPickerListener onTimerPickerListener) {
-        TimePickerDialog dialog = new TimePickerDialog(context, themeId, new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                if (onTimerPickerListener != null) {
-                    onTimerPickerListener.onConfirm(hourOfDay, minute);
-                }
-            }
-        }, hourOfDay, minute, is24HourView);
-
-        dialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-            @Override
-            public void onCancel(DialogInterface dialog) {
-                if (onTimerPickerListener != null) {
-                    onTimerPickerListener.onCancel();
-                }
-            }
-        });
-
-        if (!TextUtils.isEmpty(title)) {
-            dialog.setTitle(title);
-        }
-        dialog.show();
     }
 
     /**

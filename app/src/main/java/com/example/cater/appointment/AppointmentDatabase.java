@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021.   # COMP 4521 #
+ * # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+ * # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+ * # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+ */
+
 package com.example.cater.appointment;
 
 import android.content.Context;
@@ -15,9 +22,16 @@ import java.util.Date;
 
 @Database(entities = {Appointment.class}, version = 7, exportSchema = false)
 public abstract class AppointmentDatabase extends RoomDatabase {
-    public abstract AppointmentDao appointmentDao();
-
     private static AppointmentDatabase INSTANCE;
+    private static final Callback sRoomDatabaseCallback =
+            new Callback() {
+
+                @Override
+                public void onOpen(@NonNull SupportSQLiteDatabase db) {
+                    super.onOpen(db);
+                    new PopulateDbAsync(INSTANCE).execute();
+                }
+            };
 
     public static AppointmentDatabase getDatabase(final Context context) {
         if (INSTANCE == null) {
@@ -37,20 +51,15 @@ public abstract class AppointmentDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    private static final Callback sRoomDatabaseCallback =
-            new Callback() {
-
-                @Override
-                public void onOpen(@NonNull SupportSQLiteDatabase db) {
-                    super.onOpen(db);
-                    new PopulateDbAsync(INSTANCE).execute();
-                }
-            };
+    public abstract AppointmentDao appointmentDao();
 
     private static class PopulateDbAsync extends AsyncTask<Void, Void, Void> {
 
         private final AppointmentDao mDao;
-        PopulateDbAsync(AppointmentDatabase db) { mDao = db.appointmentDao();}
+
+        PopulateDbAsync(AppointmentDatabase db) {
+            mDao = db.appointmentDao();
+        }
 
         @Override
         protected Void doInBackground(final Void... params) {

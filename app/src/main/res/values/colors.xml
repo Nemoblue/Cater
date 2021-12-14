@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2021.   # COMP 4521 #
+  ~ # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+  ~ # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+  ~ # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+  -->
+
 <resources>
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>

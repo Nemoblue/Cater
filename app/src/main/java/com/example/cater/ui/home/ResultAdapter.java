@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021.   # COMP 4521 #
+ * # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+ * # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+ * # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+ */
+
 package com.example.cater.ui.home;
 
 
@@ -25,9 +32,9 @@ import java.net.URLEncoder;
 import java.util.List;
 
 public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultVH> {
+    private final OnInvitationCallback callback;
     Context context;
     private List<Appointment> appointments;
-    private final OnInvitationCallback callback;
 
     public ResultAdapter(Context context, OnInvitationCallback callback) {
         this.context = context;
@@ -63,7 +70,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultVH> 
                     profilePhotoResources.recycle();
                 }
             }
-            holder.mTvInvitation.setOnClickListener(v-> {
+            holder.mTvInvitation.setOnClickListener(v -> {
                 String message = "Hello! This is a greeting from Cater APP!";
                 PackageManager packageManager = context.getPackageManager();
                 Intent i = new Intent(Intent.ACTION_VIEW);
@@ -102,6 +109,10 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultVH> 
         notifyDataSetChanged();
     }
 
+    public interface OnInvitationCallback {
+        void callback(View view, Appointment appointment);
+    }
+
     public static class ResultVH extends RecyclerView.ViewHolder {
         ImageView mIvHead;
         TextView mTvName;
@@ -115,10 +126,6 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultVH> 
             mTvDesc = itemView.findViewById(R.id.mTvDesc);
             mTvInvitation = itemView.findViewById(R.id.mTvInvitation);
         }
-    }
-
-    public interface OnInvitationCallback {
-        void callback(View view, Appointment appointment);
     }
 
 }

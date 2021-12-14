@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021.   # COMP 4521 #
+ * # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+ * # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+ * # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+ */
+
 package com.example.cater.login;
 
 import android.app.Application;
@@ -37,7 +44,9 @@ public class LoginRepository {
         new LoginRepository.deleteLoginAsyncTask(mLoginDao).execute(login);
     }
 
-    public Login[] getAnyLogin() { return mLoginDao.getAnyLogin(); }
+    public Login[] getAnyLogin() {
+        return mLoginDao.getAnyLogin();
+    }
 
     private static class insertAsyncTask extends AsyncTask<Login, Void, Void> {
         private final LoginDao mAsyncTaskDao;
