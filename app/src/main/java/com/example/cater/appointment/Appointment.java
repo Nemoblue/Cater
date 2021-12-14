@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021.   # COMP 4521 #
+ * # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+ * # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+ * # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+ */
+
 package com.example.cater.appointment;
 
 import androidx.annotation.NonNull;
@@ -31,7 +38,7 @@ public class Appointment implements Serializable {
     @ColumnInfo(name = "target_time")
     protected String target_time;
 
-    public Appointment () {
+    public Appointment() {
         this.appoint_id = 0;
         user_name = "";
         user_photo = "";
@@ -40,18 +47,63 @@ public class Appointment implements Serializable {
         target_time = "";
     }
 
+    public Appointment(Builder builder) {
+        this.appoint_id = builder.aid;
+        this.canteen_id = builder.cid;
+        this.user_id = builder.uid;
+        this.user_name = builder.uName;
+        this.user_photo = builder.uPhoto;
+        this.user_phone = builder.uPhone;
+        this.appoint_date = builder.appoint_Date;
+        this.target_time = builder.target_time;
+    }
+
+    public int getAppoint_id() {
+        return this.appoint_id;
+    }
+
+    public int getCanteen_id() {
+        return this.canteen_id;
+    }
+
+    public int getUser_id() {
+        return this.user_id;
+    }
+
+    public String getUser_name() {
+        return this.user_name;
+    }
+
+    public String getUser_photo() {
+        return this.user_photo;
+    }
+
+    public String getUser_phone() {
+        return this.user_phone;
+    }
+
+    @NonNull
+    public Date getAppoint_date() {
+        return new Date(this.appoint_date);
+    }
+
+    @NonNull
+    public String getTarget_date() {
+        return this.target_time;
+    }
+
     public static class Builder {
         private final int aid;
         private final int cid;
         private final int uid;
+        private final String appoint_Date;
+        private final String target_time;
         private String uName = null;
         private String uPhoto = null;
         private String uPhone = null;
-        private final String appoint_Date;
-        private final String target_time;
 
-        public Builder (int aid, int cid, int uid,
-                        @NonNull Date appoint_Date, @NonNull String target_time) {
+        public Builder(int aid, int cid, int uid,
+                       @NonNull Date appoint_Date, @NonNull String target_time) {
             this.aid = aid;
             this.cid = cid;
             this.uid = uid;
@@ -74,29 +126,8 @@ public class Appointment implements Serializable {
             return this;
         }
 
-        public Appointment builder() { return new Appointment(this); }
+        public Appointment builder() {
+            return new Appointment(this);
+        }
     }
-
-    public Appointment(Builder builder) {
-        this.appoint_id = builder.aid;
-        this.canteen_id = builder.cid;
-        this.user_id = builder.uid;
-        this.user_name = builder.uName;
-        this.user_photo = builder.uPhoto;
-        this.user_phone = builder.uPhone;
-        this.appoint_date = builder.appoint_Date;
-        this.target_time = builder.target_time;
-    }
-
-
-    public int getAppoint_id() {return this.appoint_id;}
-    public int getCanteen_id() {return this.canteen_id;}
-    public int getUser_id() {return this.user_id;}
-    public String getUser_name() {return this.user_name;}
-    public String getUser_photo() {return this.user_photo;}
-    public String getUser_phone() {return this.user_phone;}
-    @NonNull
-    public Date getAppoint_date() {return new Date(this.appoint_date);}
-    @NonNull
-    public String getTarget_date() {return this.target_time;}
 }

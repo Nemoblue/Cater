@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021.   # COMP 4521 #
+ * # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+ * # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+ * # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+ */
+
 package com.example.cater.ui.home;
 
 
@@ -42,7 +49,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeVH> {
         Glide.with(context).load(list.get(position).getResId()).into(holder.mImageView);
         holder.mItem.setOnClickListener(view -> {
             Intent intent = new Intent(context, BookingActivity.class);
-            intent.putExtra("restaurant",list.get(position));
+            intent.putExtra("restaurant", list.get(position));
             intent.putExtra("profile", mProfile);
             context.startActivity(intent);
         });
@@ -53,7 +60,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeVH> {
         return list.size();
     }
 
-    public static class HomeVH extends RecyclerView.ViewHolder{
+    public static class HomeVH extends RecyclerView.ViewHolder {
         ImageView mImageView;
         TextView mTvName;
         TextView mTvDis;

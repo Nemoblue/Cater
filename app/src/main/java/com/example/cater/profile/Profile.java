@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021.   # COMP 4521 #
+ * # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+ * # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+ * # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+ */
+
 package com.example.cater.profile;
 
 import androidx.annotation.NonNull;
@@ -13,7 +20,7 @@ public class Profile implements Serializable {
     @ColumnInfo(name = "uid")
     private final int uid;
     @NonNull
-    @ColumnInfo (name = "phone")
+    @ColumnInfo(name = "phone")
     protected String uPhone;
 
     @ColumnInfo(name = "name")
@@ -31,18 +38,76 @@ public class Profile implements Serializable {
     @ColumnInfo(name = "active")
     protected boolean uActive;
 
-    public Profile(int uid) { this.uid = uid;
+    public Profile(int uid) {
+        this.uid = uid;
         uPhone = "Default Phone Number";
+    }
+
+    public Profile(Builder builder) {
+        this.uid = builder.uid;
+        this.uPhone = builder.uPhone;
+        if (builder.uName == null)
+            this.uName = "+" + builder.uPhone;
+        else
+            this.uName = builder.uName;
+        this.uAge = builder.uAge;
+        this.uPhoto = builder.uPhoto;
+        this.uDescription = builder.uDescription;
+        this.uLatitude = builder.uPosition[0];
+        this.uLongitude = builder.uPosition[1];
+        this.uActive = builder.uActive;
+    }
+
+    public int getUid() {
+        return this.uid;
+    }
+
+    public String getuName() {
+        return this.uName;
+    }
+
+    public int getAge() {
+        return this.uAge;
+    }
+
+    public String getPhoto() {
+        return this.uPhoto;
+    }
+
+    public String getDescription() {
+        return this.uDescription;
+    }
+
+    public double[] getPosition() {
+        return new double[]{this.uLatitude, this.uLongitude};
+    }
+
+    public boolean isuActive() {
+        return this.uActive;
+    }
+
+    @NonNull
+    public String getuPhone() {
+        return this.uPhone;
+    }
+
+    public void setLocation(double latitude, double longitude) {
+        this.uLatitude = latitude;
+        this.uLongitude = longitude;
+    }
+
+    public void setActive(boolean state) {
+        this.uActive = state;
     }
 
     public static class Builder {
         private final int uid;
         private final String uPhone;
+        private final double[] uPosition = {22.33653, 114.26363};
         private String uName = null;
         private int uAge;
         private String uPhoto = null;
         private String uDescription = null;
-        private final double[] uPosition = {22.33653,114.26363};
         private boolean uActive = true;
 
         public Builder(int uid, @NonNull String phone) {
@@ -84,38 +149,5 @@ public class Profile implements Serializable {
         public Profile builder() {
             return new Profile(this);
         }
-    }
-
-    public Profile(Builder builder) {
-        this.uid = builder.uid;
-        this.uPhone = builder.uPhone;
-        if (builder.uName == null)
-            this.uName = "+" + builder.uPhone;
-        else
-            this.uName = builder.uName;
-        this.uAge = builder.uAge;
-        this.uPhoto = builder.uPhoto;
-        this.uDescription = builder.uDescription;
-        this.uLatitude = builder.uPosition[0];
-        this.uLongitude = builder.uPosition[1];
-        this.uActive = builder.uActive;
-    }
-
-    public int getUid() {return this.uid;}
-    public String getuName() {return this.uName;}
-    public int getAge() {return this.uAge;}
-    public String getPhoto() {return this.uPhoto;}
-    public String getDescription() {return this.uDescription;}
-    public double[] getPosition() { return new double[]{this.uLatitude, this.uLongitude};}
-    public boolean isuActive() {return this.uActive;}
-    @NonNull
-    public String getuPhone() {return this.uPhone;}
-
-    public void setLocation(double latitude, double longitude) {
-        this.uLatitude = latitude;
-        this.uLongitude = longitude;
-    }
-    public void setActive(boolean state) {
-        this.uActive = state;
     }
 }

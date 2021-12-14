@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021.   # COMP 4521 #
+ * # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+ * # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+ * # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+ */
+
 package com.example.cater.ui.map;
 
 import android.Manifest;
@@ -43,22 +50,20 @@ import java.util.regex.Pattern;
 
 public class MapFragment extends Fragment implements OnMapReadyCallback {
 
-    // Variables for the Map fragment
-    private GoogleMap mMap;
-    private int mType; // 1-4 from normal map to terrain map
+    static final String STATE_FRAGMENT = "state_of_fragment";
+    private static final int REQUEST_LOCATION_PERMISSION = 1;
+    private final List<Marker> mSampleMarker = new ArrayList<>();
     // Set the initial position and zoom level
     float zoom = 18;
     LatLng hkust = new LatLng(22.33653, 114.26363);
-    private static final int REQUEST_LOCATION_PERMISSION = 1;
-
+    // Variables for the Map fragment
+    private GoogleMap mMap;
+    private int mType; // 1-4 from normal map to terrain map
     private List<Profile> mProfiles;
-    private final List<Marker> mSampleMarker = new ArrayList<>();
     private List<Integer> mSampleList = new ArrayList<>();
-
     // Variables for the guest fragment
     private boolean isFragmentDisplayed = false;
     private FragmentMapBinding binding;
-    static final String STATE_FRAGMENT = "state_of_fragment";
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {

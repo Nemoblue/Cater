@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021.   # COMP 4521 #
+ * # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+ * # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+ * # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+ */
+
 package com.example.cater.ui.home;
 
 import android.os.Bundle;
@@ -22,12 +29,16 @@ import java.util.Locale;
 
 public class HomeFragment extends Fragment {
 
+    List<RestaurantBean> list = new ArrayList<>();
     private Profile mProfile;
     private double[] mCurrentPosition;
     private FragmentHomeBinding binding;
     private RecyclerView mRvHome;
     private HomeAdapter homeAdapter;
-    List<RestaurantBean> list = new ArrayList<>();
+
+    private static double rad(double d) {
+        return d * Math.PI / 180.0;
+    }
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -120,10 +131,6 @@ public class HomeFragment extends Fragment {
         homeAdapter = new HomeAdapter(getActivity(), list, mProfile);
         mRvHome.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRvHome.setAdapter(homeAdapter);
-    }
-
-    private static double rad(double d) {
-        return d * Math.PI / 180.0;
     }
 
     @Override

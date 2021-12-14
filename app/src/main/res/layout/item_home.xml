@@ -1,34 +1,44 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ Copyright (c) 2021.   # COMP 4521 #
+  ~ # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+  ~ # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+  ~ # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+  -->
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/mItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="15dp"
-    android:id="@+id/mItem"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    android:padding="15dp">
 
-    <ImageView android:layout_width="120dp"
-        android:layout_height="120dp"
+    <ImageView
         android:id="@+id/mImageView"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"/>
+        android:layout_width="120dp"
+        android:layout_height="120dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView android:layout_width="0dp"
-        android:layout_height="wrap_content"
+    <TextView
         android:id="@+id/mTvName"
-        android:text="@string/name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:layout_marginTop="20dp"
         android:paddingRight="10dp"
-        app:layout_constraintRight_toLeftOf="@+id/mTvDis"
+        android:text="@string/name"
         app:layout_constraintLeft_toRightOf="@+id/mImageView"
-        app:layout_constraintTop_toTopOf="parent"/>
+        app:layout_constraintRight_toLeftOf="@+id/mTvDis"
+        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <TextView
         android:id="@+id/mTvDis"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:text="@string/_1500m"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toBottomOf="parent"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

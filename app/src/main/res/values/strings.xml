@@ -1,3 +1,10 @@
+<!--
+  ~ Copyright (c) 2021.   # COMP 4521 #
+  ~ # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+  ~ # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+  ~ # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+  -->
+
 <resources>
     <string name="app_name">Cater</string>
     <string name="nav_header_title">Not Login</string>
@@ -84,7 +91,7 @@
     <string name="search">SEARCH</string>
     <string name="invitation">invitation</string>
 
-    <string-array name="phone_array" >
+    <string-array name="phone_array">
         <item>+852</item>
         <item>+86</item>
     </string-array>

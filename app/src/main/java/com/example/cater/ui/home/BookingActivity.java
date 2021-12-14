@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021.   # COMP 4521 #
+ * # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+ * # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+ * # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+ */
+
 package com.example.cater.ui.home;
 
 import android.annotation.SuppressLint;
@@ -31,6 +38,7 @@ import java.util.Objects;
  * create by liubit on 2021/12/4
  */
 public class BookingActivity extends AppCompatActivity {
+    private final Handler handler = new Handler(Looper.getMainLooper());
     private RestaurantBean restaurantBean;
     private Profile mProfile;
     private String target_date;
@@ -38,9 +46,7 @@ public class BookingActivity extends AppCompatActivity {
     private TextView mBtnDate;
     private TextView mBtnFromTime;
     private ResultAdapter resultAdapter;
-
     private AppointmentViewModel appointmentViewModel;
-    private final Handler handler = new Handler(Looper.getMainLooper());
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -100,7 +106,7 @@ public class BookingActivity extends AppCompatActivity {
                 if (target_date == null || target_time == null) {
                     if (target_date == null && target_time == null)
                         target = "Current";
-                    else if (target_time== null) {
+                    else if (target_time == null) {
                         String[] strs_time = BasisTimesUtils.getNowTime().split(":");
                         target = target_date + " " + strs_time[0] + ":" + strs_time[1];
                     } else {

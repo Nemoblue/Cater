@@ -1,3 +1,10 @@
+/*
+ * Copyright (c) 2021.   # COMP 4521 #
+ * # SHEN, Ye #	 20583137	yshenat@connect.ust.hk
+ * # ZHOU, Ji #	 20583761	jzhoubl@connect.ust.hk
+ * # WU, Sik Chit #	 20564571	scwuaa@connect.ust.hk
+ */
+
 package com.example.cater.appointment;
 
 import android.app.Application;
@@ -22,12 +29,20 @@ public class AppointmentViewModel extends AndroidViewModel {
         mAppointment = new MutableLiveData<>();
     }
 
-    public void insert(Appointment appointment) {mRepository.insert(appointment);}
-    public void deleteAll() {mRepository.deleteAll();}
-    public void deleteAppointment(Appointment appointment) {mRepository.deleteAppointment(appointment);}
+    public void insert(Appointment appointment) {
+        mRepository.insert(appointment);
+    }
+
+    public void deleteAll() {
+        mRepository.deleteAll();
+    }
+
+    public void deleteAppointment(Appointment appointment) {
+        mRepository.deleteAppointment(appointment);
+    }
 
     public LiveData<List<Appointment>> getAppointmentByCanteen(int canteen_id) {
-        if(mRepository.getAppointmentByCanteen(canteen_id) == null)
+        if (mRepository.getAppointmentByCanteen(canteen_id) == null)
             return new MutableLiveData<>();
         mCurrentAppointments = mRepository.getAppointmentByCanteen(canteen_id);
         return mCurrentAppointments;
@@ -38,7 +53,7 @@ public class AppointmentViewModel extends AndroidViewModel {
     }
 
     public LiveData<List<Appointment>> getAppointmentByTime(int canteen_id, Time time) {
-        if(mRepository.getAppointmentByTime(canteen_id, time) == null)
+        if (mRepository.getAppointmentByTime(canteen_id, time) == null)
             return new MutableLiveData<>();
         mCurrentAppointments = mRepository.getAppointmentByTime(canteen_id, time);
         return mCurrentAppointments;
