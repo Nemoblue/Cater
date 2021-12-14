@@ -73,6 +73,16 @@
     <string name="setting">Edit Profile</string>
     <string name="save">save</string>
     <string name="logout">logout</string>
+    <string name="date">Date</string>
+    <string name="today">Today</string>
+    <string name="time">Time</string>
+    <string name="from_now_12_00">From now(12:00)</string>
+    <string name="reserve">Reserve</string>
+    <string name="not_login">Not Login</string>
+    <string name="name">name</string>
+    <string name="_1500m">1500m</string>
+    <string name="search">SEARCH</string>
+    <string name="invitation">invitation</string>
 
     <string-array name="phone_array" >
         <item>+852</item>

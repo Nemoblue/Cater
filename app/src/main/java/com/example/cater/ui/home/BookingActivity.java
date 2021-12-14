@@ -61,7 +61,7 @@ public class BookingActivity extends AppCompatActivity {
         RecyclerView mRvResult = findViewById(R.id.mRvResult);
 
         mBtnDate.setOnClickListener(view -> showSelectDate(0));
-        mBtnFromTime.setOnClickListener(view -> showSelectTime("请选择开始时间", 0));
+        mBtnFromTime.setOnClickListener(view -> showSelectTime("Select Time", 0));
 
         mRvResult.setLayoutManager(new LinearLayoutManager(this));
         resultAdapter = new ResultAdapter(this, (view, appointment) ->
@@ -138,7 +138,7 @@ public class BookingActivity extends AppCompatActivity {
 
     private void showSelectDate(int type) {
         String[] strs = BasisTimesUtils.getNowDate().split("-");//yyyy-MM-dd
-        BasisTimesUtils.showDatePickerDialog(this, true, "请选择日期", Integer.parseInt(strs[0]), Integer.parseInt(strs[1]), Integer.parseInt(strs[2]), new BasisTimesUtils.OnDatePickerListener() {
+        BasisTimesUtils.showDatePickerDialog(this, true, "Select Date", Integer.parseInt(strs[0]), Integer.parseInt(strs[1]), Integer.parseInt(strs[2]), new BasisTimesUtils.OnDatePickerListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onConfirm(int year, int month, int dayOfMonth) {

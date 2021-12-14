@@ -28,10 +28,10 @@
             <TextView android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/mTvName"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 app:layout_constraintLeft_toRightOf="@+id/mIvHead"
                 app:layout_constraintTop_toTopOf="@+id/mIvHead"
-                android:text="SEARCH"
+                android:text="@string/search"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 android:textColor="@color/black"/>
@@ -39,15 +39,15 @@
             <TextView android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/mTvDesc"
-                android:layout_marginLeft="15dp"
+                android:layout_marginStart="15dp"
                 app:layout_constraintLeft_toRightOf="@+id/mIvHead"
                 app:layout_constraintBottom_toBottomOf="@+id/mIvHead"
-                android:text="SEARCH"/>
+                android:text="@string/search"/>
 
             <TextView android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/mTvInvitation"
-                android:layout_marginRight="5dp"
+                android:layout_marginEnd="5dp"
                 android:background="@drawable/bg_txt"
                 android:paddingTop="5dp"
                 android:paddingBottom="5dp"
@@ -57,7 +57,7 @@
                 app:layout_constraintRight_toRightOf="parent"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                android:text="invitation"/>
+                android:text="@string/invitation"/>
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 

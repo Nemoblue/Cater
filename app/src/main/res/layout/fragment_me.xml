@@ -31,7 +31,7 @@
             android:editable="false"
             android:ems="10"
             android:inputType="none"
-            android:text="Not Login"
+            android:text="@string/not_login"
             app:layout_constraintBottom_toTopOf="@+id/user_age"
             app:layout_constraintStart_toEndOf="@+id/dispaly_name"
             app:layout_constraintTop_toTopOf="parent" />
