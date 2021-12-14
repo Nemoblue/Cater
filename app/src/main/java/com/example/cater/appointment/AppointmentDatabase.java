@@ -37,8 +37,8 @@ public abstract class AppointmentDatabase extends RoomDatabase {
         return INSTANCE;
     }
 
-    private static final RoomDatabase.Callback sRoomDatabaseCallback =
-            new RoomDatabase.Callback() {
+    private static final Callback sRoomDatabaseCallback =
+            new Callback() {
 
                 @Override
                 public void onOpen(@NonNull SupportSQLiteDatabase db) {

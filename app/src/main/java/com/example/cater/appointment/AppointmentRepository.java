@@ -38,11 +38,11 @@ public class AppointmentRepository {
     }
 
     public void insert(Appointment appointment) {
-        new AppointmentRepository.insertAsyncTask(mAppointmentDao).execute(appointment);
+        new insertAsyncTask(mAppointmentDao).execute(appointment);
     }
 
     public void deleteAppointment(Appointment appointment) {
-        new AppointmentRepository.deleteAppointmentAsyncTask(mAppointmentDao).execute(appointment);
+        new deleteAppointmentAsyncTask(mAppointmentDao).execute(appointment);
     }
 
     private static class insertAsyncTask extends AsyncTask<Appointment, Void, Void> {
