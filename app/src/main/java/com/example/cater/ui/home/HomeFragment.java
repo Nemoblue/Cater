@@ -98,7 +98,7 @@ public class HomeFragment extends Fragment {
         list.add(20, new RestaurantBean("Food Truck", R.mipmap.a21, "--m",
                 22.33691285590851, 114.26345117694139));
 
-        homeAdapter = new HomeAdapter(getActivity(), list);
+        homeAdapter = new HomeAdapter(getActivity(), list, mProfile);
         mRvHome.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRvHome.setAdapter(homeAdapter);
     }
@@ -123,7 +123,7 @@ public class HomeFragment extends Fragment {
                 distance = String.format(Locale.getDefault(), "%.1fm", s);
             list.get(i).setDistance(distance);
         }
-        homeAdapter = new HomeAdapter(getActivity(), list);
+        homeAdapter = new HomeAdapter(getActivity(), list, mProfile);
         mRvHome.setLayoutManager(new LinearLayoutManager(getActivity()));
         mRvHome.setAdapter(homeAdapter);
     }

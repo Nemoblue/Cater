@@ -10,20 +10,26 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.cater.R;
+import com.example.cater.profile.Profile;
+import com.example.cater.profile.ProfileViewModel;
 
 import java.util.List;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeVH> {
     Context context;
     List<RestaurantBean> list;
+    Profile mProfile;
 
-    public HomeAdapter(Context context, List<RestaurantBean> list) {
+    public HomeAdapter(Context context, List<RestaurantBean> list, Profile profile) {
         this.context = context;
         this.list = list;
+        this.mProfile = profile;
     }
 
     @NonNull
@@ -40,6 +46,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeVH> {
         holder.mItem.setOnClickListener(view -> {
             Intent intent = new Intent(context, BookingActivity.class);
             intent.putExtra("restaurant",list.get(position));
+            intent.putExtra("profile", mProfile);
             context.startActivity(intent);
         });
     }
