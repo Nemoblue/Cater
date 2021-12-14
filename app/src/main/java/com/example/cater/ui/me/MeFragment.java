@@ -25,7 +25,6 @@ import androidx.annotation.NonNull;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.bumptech.glide.Glide;
@@ -36,11 +35,9 @@ import com.example.cater.profile.ProfileViewModel;
 import com.example.cater.ui.login.LoginActivity;
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.navigation.NavigationView;
 
 import java.util.Locale;
-import java.util.Objects;
 
 public class MeFragment extends Fragment {
 
@@ -87,73 +84,61 @@ public class MeFragment extends Fragment {
 
         mFusedLocationClient = LocationServices.getFusedLocationProviderClient(requireActivity());
         mProfileViewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel.class);
-        mProfileViewModel.getProfile().observe(requireActivity(), new Observer<Profile>() {
-            @Override
-            public void onChanged(Profile profile) {
-                mProfile = profile;
+        mProfileViewModel.getProfile().observe(requireActivity(), profile -> {
+            mProfile = profile;
+            setUI(mProfile);
+        });
+
+        user_icon.setOnClickListener(view -> {
+            if (icon_count == 7)
+                icon_count = 0;
+            else
+                icon_count++;
+            @SuppressLint("Recycle") TypedArray profilePhotoResources =
+                    getResources().obtainTypedArray(R.array.profile_photos);
+            Glide.with(requireContext()).load(profilePhotoResources.getResourceId(icon_count, 0)).into(user_icon);
+        });
+
+        login.setOnClickListener(view -> {
+            if (login.getText().toString().equals(getString(R.string.button_login_register))) {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivityForResult(intent, LOGIN_REQUEST);
+            } else {
+                mProfile = zero_profile;
+                mProfileViewModel.logout();
                 setUI(mProfile);
             }
         });
 
-        user_icon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (icon_count == 7)
-                    icon_count = 0;
-                else
-                    icon_count++;
-                @SuppressLint("Recycle") TypedArray profilePhotoResources =
-                        getResources().obtainTypedArray(R.array.profile_photos);
-                Glide.with(requireContext()).load(profilePhotoResources.getResourceId(icon_count, 0)).into(user_icon);
-            }
-        });
-
-        login.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (login.getText().toString().equals(getString(R.string.button_login_register))) {
-                    Intent intent = new Intent(getActivity(), LoginActivity.class);
-                    startActivityForResult(intent, LOGIN_REQUEST);
-                } else {
-                    mProfile = zero_profile;
-                    mProfileViewModel.logout();
-                    setUI(mProfile);
+        set_button.setOnClickListener(view -> {
+            if (set_button.getText().toString().equals(getString(R.string.setting))) {
+                set_button.setText(R.string.save);
+                user_icon.setEnabled(true);
+                user_name.setInputType(InputType.TYPE_CLASS_TEXT);
+                user_age.setInputType(InputType.TYPE_CLASS_NUMBER);
+                user_description.setInputType(InputType.TYPE_CLASS_TEXT);
+            } else {
+                enableLocation();
+                set_button.setText(R.string.setting);
+                user_icon.setEnabled(false);
+                user_name.setInputType(InputType.TYPE_NULL);
+                user_age.setInputType(InputType.TYPE_NULL);
+                user_description.setInputType(InputType.TYPE_NULL);
+                Profile profile = new Profile.Builder(mProfile.getUid(), mProfile.getuPhone())
+                        .age(parseInt(user_age.getText().toString()))
+                        .name(user_name.getText().toString())
+                        .description(user_description.getText().toString())
+                        .photo(String.format(Locale.getDefault(),
+                                "default_%d", icon_count))
+                        .builder();
+                if (mLastLocation != null) {
+                    Log.d("map", "check point");
+                    profile.setLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
+                    profile.setActive(true);
                 }
-            }
-        });
-
-        set_button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (set_button.getText().toString().equals(getString(R.string.setting))) {
-                    set_button.setText(R.string.save);
-                    user_icon.setEnabled(true);
-                    user_name.setInputType(InputType.TYPE_CLASS_TEXT);
-                    user_age.setInputType(InputType.TYPE_CLASS_NUMBER);
-                    user_description.setInputType(InputType.TYPE_CLASS_TEXT);
-                } else {
-                    enableLocation();
-                    set_button.setText(R.string.setting);
-                    user_icon.setEnabled(false);
-                    user_name.setInputType(InputType.TYPE_NULL);
-                    user_age.setInputType(InputType.TYPE_NULL);
-                    user_description.setInputType(InputType.TYPE_NULL);
-                    Profile profile = new Profile.Builder(mProfile.getUid(), mProfile.getuPhone())
-                            .age(parseInt(user_age.getText().toString()))
-                            .name(user_name.getText().toString())
-                            .description(user_description.getText().toString())
-                            .photo(String.format(Locale.getDefault(),
-                                    "default_%d", icon_count))
-                            .builder();
-                    if (mLastLocation != null) {
-                        Log.d("map", "check point");
-                        profile.setLocation(mLastLocation.getLatitude(), mLastLocation.getLongitude());
-                        profile.setActive(true);
-                    }
-                    mProfile = profile;
-                    setUI(profile);
-                    mProfileViewModel.insert(profile);
-                }
+                mProfile = profile;
+                setUI(profile);
+                mProfileViewModel.insert(profile);
             }
         });
         return root;
@@ -207,12 +192,7 @@ public class MeFragment extends Fragment {
                     Manifest.permission.ACCESS_FINE_LOCATION)
                     == PackageManager.PERMISSION_GRANTED) {
                 mFusedLocationClient.getLastLocation().addOnSuccessListener(
-                        new OnSuccessListener<Location>() {
-                            @Override
-                            public void onSuccess(Location location) {
-                                mLastLocation = location;
-                            }
-                        }
+                        location -> mLastLocation = location
                 );
             } else {
                 ActivityCompat.requestPermissions(requireActivity(), new String[]
@@ -250,13 +230,10 @@ public class MeFragment extends Fragment {
         if (requestCode == LOGIN_REQUEST && resultCode == Activity.RESULT_OK) {
             int result = data.getIntExtra(LoginActivity.EXTRA_REPLY, 0);
 
-            mProfileViewModel.getProfileByID(result).observe(requireActivity(), new Observer<Profile>() {
-                @Override
-                public void onChanged(Profile profile) {
-                    if (profile != null) {
-                        mProfile = profile;
-                        setUI(mProfile);
-                    }
+            mProfileViewModel.getProfileByID(result).observe(requireActivity(), profile -> {
+                if (profile != null) {
+                    mProfile = profile;
+                    setUI(mProfile);
                 }
             });
             login.setText(R.string.logout);

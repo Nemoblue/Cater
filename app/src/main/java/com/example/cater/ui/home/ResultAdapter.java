@@ -40,11 +40,12 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultVH> 
         return new ResultVH(LayoutInflater.from(context).inflate(R.layout.item_result, parent, false));
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ResultVH holder, int position) {
         if (appointments != null) {
             Appointment current = appointments.get(position);
-            holder.mTvDesc.setText(current.getTarget_date().toString());
+            holder.mTvDesc.setText(current.getTarget_date());
 
             if (current.getUser_name() != null)
                 holder.mTvName.setText(current.getUser_name());

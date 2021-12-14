@@ -14,7 +14,7 @@ public class Login {
 
     @NonNull
     @ColumnInfo(name = "password")
-    private String password;
+    private final String password;
 
     @ColumnInfo(name = "uid")
     private final int uid;

@@ -51,33 +51,27 @@ public class GuestFragment extends Fragment {
                 inflater.inflate(R.layout.fragment_guest, container, false);
         final ImageButton imageButton = rootView.findViewById(R.id.guest_image_button);
         final Button chatButton = rootView.findViewById(R.id.map_guest_chat);
-        imageButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                assert getParentFragment() != null;
-                ((MapFragment) getParentFragment()).removeFragment();
-            }
+        imageButton.setOnClickListener(view -> {
+            assert getParentFragment() != null;
+            ((MapFragment) getParentFragment()).removeFragment();
         });
-        chatButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                String message = "Hello! This is a greeting from Cater APP!";
-                PackageManager packageManager = requireContext().getPackageManager();
-                Intent i = new Intent(Intent.ACTION_VIEW);
+        chatButton.setOnClickListener(view -> {
+            String message = "Hello! This is a greeting from Cater APP!";
+            PackageManager packageManager = requireContext().getPackageManager();
+            Intent i = new Intent(Intent.ACTION_VIEW);
 
-                try {
-                    String url = "https://api.whatsapp.com/send?phone=" + mPhone + "&text=" + URLEncoder.encode(message, "UTF-8");
-                    i.setPackage("com.whatsapp");
-                    i.setData(Uri.parse(url));
-                    if (i.resolveActivity(packageManager) != null) {
-                        requireContext().startActivity(i);
-                    }
-                } catch (Exception e) {
-                    Toast.makeText(requireContext(),
-                            "Open Whatsapp failed, please check whether the app is on your phone!",
-                            Toast.LENGTH_LONG).show();
-                    e.printStackTrace();
+            try {
+                String url = "https://api.whatsapp.com/send?phone=" + mPhone + "&text=" + URLEncoder.encode(message, "UTF-8");
+                i.setPackage("com.whatsapp");
+                i.setData(Uri.parse(url));
+                if (i.resolveActivity(packageManager) != null) {
+                    requireContext().startActivity(i);
                 }
+            } catch (Exception e) {
+                Toast.makeText(requireContext(),
+                        "Open Whatsapp failed, please check whether the app is on your phone!",
+                        Toast.LENGTH_LONG).show();
+                e.printStackTrace();
             }
         });
 

@@ -7,7 +7,6 @@ import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -20,11 +19,9 @@ import com.example.cater.profile.ProfileViewModel;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Random;
 
 public class HomeFragment extends Fragment {
 
-    private ProfileViewModel mProfileViewModel;
     private Profile mProfile;
     private double[] mCurrentPosition;
     private FragmentHomeBinding binding;
@@ -40,15 +37,12 @@ public class HomeFragment extends Fragment {
         mRvHome = binding.mRvHome;
         initView();
 
-        mProfileViewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel.class);
-        mProfileViewModel.getProfile().observe(requireActivity(), new Observer<Profile>() {
-            @Override
-            public void onChanged(Profile profile) {
-                mProfile = profile;
-                if (mProfile != null) {
-                    mCurrentPosition = mProfile.getPosition();
-                    updateView(mCurrentPosition);
-                }
+        ProfileViewModel mProfileViewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel.class);
+        mProfileViewModel.getProfile().observe(requireActivity(), profile -> {
+            mProfile = profile;
+            if (mProfile != null) {
+                mCurrentPosition = mProfile.getPosition();
+                updateView(mCurrentPosition);
             }
         });
         return root;
