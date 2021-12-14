@@ -30,7 +30,7 @@ public interface AppointmentDao {
     LiveData<List<Appointment>> getAppointmentByCanteen(int canteen_id);
 
     @Query("SELECT * FROM appointment_table " +
-            "WHERE canteen_id = :canteen_id AND target_date <= :time " +
+            "WHERE canteen_id = :canteen_id AND appoint_date <= :time " +
             "ORDER BY appoint_id ASC")
     LiveData<List<Appointment>> getAppointmentByTime(int canteen_id, String time);
 

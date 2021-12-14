@@ -14,22 +14,25 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.cater.R;
+import com.example.cater.profile.Profile;
 
 import java.util.List;
 
 public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeVH> {
     Context context;
     List<RestaurantBean> list;
+    Profile mProfile;
 
-    public HomeAdapter(Context context, List<RestaurantBean> list) {
+    public HomeAdapter(Context context, List<RestaurantBean> list, Profile profile) {
         this.context = context;
         this.list = list;
+        this.mProfile = profile;
     }
 
     @NonNull
     @Override
     public HomeVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return new HomeVH(LayoutInflater.from(context).inflate(R.layout.item_home,parent,false));
+        return new HomeVH(LayoutInflater.from(context).inflate(R.layout.item_home, parent, false));
     }
 
     @Override
@@ -40,6 +43,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeVH> {
         holder.mItem.setOnClickListener(view -> {
             Intent intent = new Intent(context, BookingActivity.class);
             intent.putExtra("restaurant",list.get(position));
+            intent.putExtra("profile", mProfile);
             context.startActivity(intent);
         });
     }
@@ -49,7 +53,7 @@ public class HomeAdapter extends RecyclerView.Adapter<HomeAdapter.HomeVH> {
         return list.size();
     }
 
-    public class HomeVH extends RecyclerView.ViewHolder{
+    public static class HomeVH extends RecyclerView.ViewHolder{
         ImageView mImageView;
         TextView mTvName;
         TextView mTvDis;

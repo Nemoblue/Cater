@@ -13,13 +13,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
 import com.example.cater.R;
@@ -34,7 +32,6 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.android.gms.maps.model.PointOfInterest;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,26 +71,20 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
         View root = binding.getRoot();
         setHasOptionsMenu(true);
 
-        binding.buttonRefresh.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                for (int i = 0; i < mSampleMarker.size(); i++)
-                    mSampleMarker.get(i).remove();
-                mSampleMarker.clear();
+        binding.buttonRefresh.setOnClickListener(view -> {
+            for (int i = 0; i < mSampleMarker.size(); i++)
+                mSampleMarker.get(i).remove();
+            mSampleMarker.clear();
 
-                setProfileMarker(mProfiles);
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hkust, zoom));
-                Toast.makeText(requireContext(), R.string.marker_refresh,
-                        Toast.LENGTH_SHORT).show();
-            }
+            setProfileMarker(mProfiles);
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(hkust, zoom));
+            Toast.makeText(requireContext(), R.string.marker_refresh,
+                    Toast.LENGTH_SHORT).show();
         });
-        binding.buttonClear.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                mMap.clear();
-                Toast.makeText(requireContext(), R.string.marker_clear,
-                        Toast.LENGTH_SHORT).show();
-            }
+        binding.buttonClear.setOnClickListener(view -> {
+            mMap.clear();
+            Toast.makeText(requireContext(), R.string.marker_clear,
+                    Toast.LENGTH_SHORT).show();
         });
 
         SupportMapFragment mapFragment = SupportMapFragment.newInstance();
@@ -112,14 +103,11 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
         assert getParentFragment() != null;
         ProfileViewModel mProfileViewModel = ViewModelProviders.of(requireActivity()).get(ProfileViewModel.class);
-        mProfileViewModel.getActiveProfiles().observe(requireActivity(), new Observer<List<Profile>>() {
-            @Override
-            public void onChanged(@Nullable final List<Profile> profiles) {
-                for (int i = 0; i < mSampleMarker.size(); i++)
-                    mSampleMarker.get(i).remove();
-                mSampleMarker.clear();
-                setProfileMarker(profiles);
-            }
+        mProfileViewModel.getActiveProfiles().observe(requireActivity(), profiles -> {
+            for (int i = 0; i < mSampleMarker.size(); i++)
+                mSampleMarker.get(i).remove();
+            mSampleMarker.clear();
+            setProfileMarker(profiles);
         });
 
         setMapLongClick(mMap);
@@ -129,32 +117,26 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
     }
 
     private void setMapLongClick(final GoogleMap map) {
-        map.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(@NonNull LatLng latLng) {
-                String snippet = String.format(Locale.getDefault(),
-                        "Lat: %1$.5f, Long: %2$.5f",
-                        latLng.latitude,
-                        latLng.longitude);
+        map.setOnMapLongClickListener(latLng -> {
+            String snippet = String.format(Locale.getDefault(),
+                    "Lat: %1$.5f, Long: %2$.5f",
+                    latLng.latitude,
+                    latLng.longitude);
 
-                map.addMarker(new MarkerOptions()
-                        .position(latLng)
-                        .title(getString(R.string.dropped_pin))
-                        .snippet(snippet));
-            }
+            map.addMarker(new MarkerOptions()
+                    .position(latLng)
+                    .title(getString(R.string.dropped_pin))
+                    .snippet(snippet));
         });
     }
 
     private void setPoiClick(final GoogleMap map) {
-        map.setOnPoiClickListener(new GoogleMap.OnPoiClickListener() {
-            @Override
-            public void onPoiClick(@NonNull PointOfInterest poi) {
-                Marker poiMarker = mMap.addMarker(new MarkerOptions()
-                        .position(poi.latLng)
-                        .title(poi.name));
-                assert poiMarker != null;
-                poiMarker.showInfoWindow();
-            }
+        map.setOnPoiClickListener(poi -> {
+            Marker poiMarker = mMap.addMarker(new MarkerOptions()
+                    .position(poi.latLng)
+                    .title(poi.name));
+            assert poiMarker != null;
+            poiMarker.showInfoWindow();
         });
     }
 
@@ -217,12 +199,9 @@ public class MapFragment extends Fragment implements OnMapReadyCallback {
 
     private void setInfoWindowClickToProfile(GoogleMap map) {
         map.setOnInfoWindowClickListener(
-                new GoogleMap.OnInfoWindowClickListener() {
-                    @Override
-                    public void onInfoWindowClick(@NonNull Marker marker) {
-                        if (marker.getTag() == "Profile") {
-                            displayFragment(marker.getTitle());
-                        }
+                marker -> {
+                    if (marker.getTag() == "Profile") {
+                        displayFragment(marker.getTitle());
                     }
                 }
         );

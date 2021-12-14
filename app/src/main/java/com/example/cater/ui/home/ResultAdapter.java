@@ -1,34 +1,33 @@
 package com.example.cater.ui.home;
 
 
-import android.app.Application;
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.content.res.TypedArray;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.lifecycle.ViewModelProviders;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.cater.R;
 import com.example.cater.appointment.Appointment;
-import com.example.cater.appointment.AppointmentViewModel;
-import com.example.cater.profile.Profile;
-import com.example.cater.profile.ProfileRepository;
-import com.example.cater.profile.ProfileViewModel;
 
+import java.net.URLEncoder;
 import java.util.List;
 
 public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultVH> {
     Context context;
     private List<Appointment> appointments;
-    private OnInvitationCallback callback;
+    private final OnInvitationCallback callback;
 
     public ResultAdapter(Context context, OnInvitationCallback callback) {
         this.context = context;
@@ -41,11 +40,12 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultVH> 
         return new ResultVH(LayoutInflater.from(context).inflate(R.layout.item_result, parent, false));
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public void onBindViewHolder(@NonNull ResultVH holder, int position) {
         if (appointments != null) {
             Appointment current = appointments.get(position);
-            holder.mTvDesc.setText(current.getAppoint_date().toString().substring(0, 19));
+            holder.mTvDesc.setText(current.getTarget_date());
 
             if (current.getUser_name() != null)
                 holder.mTvName.setText(current.getUser_name());
@@ -64,6 +64,23 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultVH> 
                 }
             }
             holder.mTvInvitation.setOnClickListener(v-> {
+                String message = "Hello! This is a greeting from Cater APP!";
+                PackageManager packageManager = context.getPackageManager();
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                try {
+                    String url = "https://api.whatsapp.com/send?phone=" + current.getUser_phone() + "&text=" + URLEncoder.encode(message, "UTF-8");
+                    i.setPackage("com.whatsapp");
+                    i.setData(Uri.parse(url));
+                    if (i.resolveActivity(packageManager) != null) {
+                        context.startActivity(i);
+                    }
+                } catch (Exception e) {
+                    Toast.makeText(context,
+                            "Open Whatsapp failed, please check whether the app is on your phone!",
+                            Toast.LENGTH_LONG).show();
+                    e.printStackTrace();
+                }
+
                 if (callback != null) callback.callback(holder.mTvInvitation, current);
             });
         } else {
@@ -79,6 +96,7 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultVH> 
         else return 0;
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     void setAppointments(List<Appointment> appoints) {
         appointments = appoints;
         notifyDataSetChanged();

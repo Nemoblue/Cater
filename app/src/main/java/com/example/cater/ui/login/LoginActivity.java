@@ -10,7 +10,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.AdapterView;
@@ -87,38 +86,27 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
             phoneSpinner.setAdapter(adapter);
         }
 
-        loginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                loginTask();
-            }
+        loginButton.setOnClickListener(v -> loginTask());
+
+        registerButton.setOnClickListener(view -> {
+            enableLocation();
+            mPhone = mPhonePrefix + phoneEditText.getText().toString();
+            mPassword = passwordEditText.getText().toString();
+            new RegisterAsyncTask(profileViewModel, loginRepository).execute(
+                    mPhone, mPassword);
         });
 
-        registerButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                enableLocation();
-                mPhone = mPhonePrefix + phoneEditText.getText().toString();
-                mPassword = passwordEditText.getText().toString();
-                new RegisterAsyncTask(profileViewModel, loginRepository).execute(
-                        mPhone, mPassword);
+        loginViewModel.getLoginFormState().observe(this, loginFormState -> {
+            if (loginFormState == null) {
+                return;
             }
-        });
-
-        loginViewModel.getLoginFormState().observe(this, new Observer<LoginFormState>() {
-            @Override
-            public void onChanged(@Nullable LoginFormState loginFormState) {
-                if (loginFormState == null) {
-                    return;
-                }
-                loginButton.setEnabled(loginFormState.isDataValid());
-                registerButton.setEnabled(loginFormState.isDataValid());
-                if (loginFormState.getUsernameError() != null) {
-                    phoneEditText.setError(getString(loginFormState.getUsernameError()));
-                }
-                if (loginFormState.getPasswordError() != null) {
-                    passwordEditText.setError(getString(loginFormState.getPasswordError()));
-                }
+            loginButton.setEnabled(loginFormState.isDataValid());
+            registerButton.setEnabled(loginFormState.isDataValid());
+            if (loginFormState.getUsernameError() != null) {
+                phoneEditText.setError(getString(loginFormState.getUsernameError()));
+            }
+            if (loginFormState.getPasswordError() != null) {
+                passwordEditText.setError(getString(loginFormState.getPasswordError()));
             }
         });
 
@@ -144,20 +132,17 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
     private void loginTask() {
         mPhone = mPhonePrefix + phoneEditText.getText().toString();
         mPassword = passwordEditText.getText().toString();
-        loginRepository.getLogin(mPhone, mPassword).observe(this, new Observer<Login>() {
-            @Override
-            public void onChanged(Login login) {
-                if (login != null) {
-                    replyMe(login.getUid());
-                } else {
-                    View view = LoginActivity.this.getCurrentFocus();
-                    if (view != null) {
-                        InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
-                        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-                    }
-                    passwordEditText.getText().clear();
-                    Toast.makeText(getApplicationContext(), R.string.login_failed, Toast.LENGTH_SHORT).show();
+        loginRepository.getLogin(mPhone, mPassword).observe(this, login -> {
+            if (login != null) {
+                replyMe(login.getUid());
+            } else {
+                View view = LoginActivity.this.getCurrentFocus();
+                if (view != null) {
+                    InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+                    imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
+                passwordEditText.getText().clear();
+                Toast.makeText(getApplicationContext(), R.string.login_failed, Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -216,12 +201,7 @@ public class LoginActivity extends AppCompatActivity implements AdapterView.OnIt
                 Manifest.permission.ACCESS_FINE_LOCATION)
                 == PackageManager.PERMISSION_GRANTED) {
             mFusedLocationClient.getLastLocation().addOnSuccessListener(
-                    new OnSuccessListener<Location>() {
-                        @Override
-                        public void onSuccess(Location location) {
-                            mLastLocation = location;
-                        }
-                    }
+                    location -> mLastLocation = location
             );
         } else {
             ActivityCompat.requestPermissions(this, new String[]

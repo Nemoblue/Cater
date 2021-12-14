@@ -1,7 +1,5 @@
 package com.example.cater.ui.home;
 
-import com.google.android.gms.maps.model.LatLng;
-
 import java.io.Serializable;
 
 /**
