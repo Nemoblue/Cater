@@ -55,19 +55,19 @@ public abstract class AppointmentDatabase extends RoomDatabase {
         @Override
         protected Void doInBackground(final Void... params) {
             //mDao.deleteAll();
-            if (mDao.getAnyAppointment().length < 1) {
-                // Populate the database
-                Date date = new Date(System.currentTimeMillis());
-                Appointment appointment1 = new Appointment.Builder(0, R.mipmap.a2, 0, date, date)
-                        .name("Jason").photo("default_1").builder();
-                Appointment appointment2 = new Appointment.Builder(1, R.mipmap.a1, 1, date, date)
-                        .name("Monica").photo("default_2").builder();
-                Appointment appointment3 = new Appointment.Builder(2, R.mipmap.a1, 3, date, date)
-                        .name("David").photo("default_4").builder();
-                mDao.insert(appointment1);
-                mDao.insert(appointment2);
-                mDao.insert(appointment3);
-            }
+//            if (mDao.getAnyAppointment().length < 1) {
+//                // Populate the database
+//                Date date = new Date(System.currentTimeMillis());
+//                Appointment appointment1 = new Appointment.Builder(0, R.mipmap.a2, 0, date, date)
+//                        .name("Jason").photo("default_1").builder();
+//                Appointment appointment2 = new Appointment.Builder(1, R.mipmap.a1, 1, date, date)
+//                        .name("Monica").photo("default_2").builder();
+//                Appointment appointment3 = new Appointment.Builder(2, R.mipmap.a1, 3, date, date)
+//                        .name("David").photo("default_4").builder();
+//                mDao.insert(appointment1);
+//                mDao.insert(appointment2);
+//                mDao.insert(appointment3);
+//            }
             return null;
         }
     }

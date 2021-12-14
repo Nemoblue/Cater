@@ -20,6 +20,11 @@ public class AppointmentRepository {
     LiveData<List<Appointment>> getAppointmentByCanteen(int canteen_id) {
         return mAppointmentDao.getAppointmentByCanteen(canteen_id);
     }
+
+    Appointment[] getAll() {
+        return mAppointmentDao.getAnyAppointment();
+    }
+
     LiveData<List<Appointment>> getAppointmentByTime(int canteen_id, Time time) {
         return mAppointmentDao.getAppointmentByTime(canteen_id, time.toString());
     }

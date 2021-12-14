@@ -33,6 +33,10 @@ public class AppointmentViewModel extends AndroidViewModel {
         return mCurrentAppointments;
     }
 
+    public int getSize() {
+        return mRepository.getAll().length;
+    }
+
     public LiveData<List<Appointment>> getAppointmentByTime(int canteen_id, Time time) {
         if(mRepository.getAppointmentByTime(canteen_id, time) == null)
             return new MutableLiveData<>();

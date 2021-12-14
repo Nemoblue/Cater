@@ -42,6 +42,16 @@
         <item>@drawable/default_8</item>
     </array>
 
+    <array name="photos">
+        <item>default_1</item>
+        <item>default_2</item>
+        <item>default_3</item>
+        <item>default_4</item>
+        <item>default_5</item>
+        <item>default_6</item>
+        <item>default_7</item>
+    </array>
+
     <!-- Text for Me fragment. -->
     <string name="user_icon">user_icon</string>
     <string name="user_name">Name: </string>

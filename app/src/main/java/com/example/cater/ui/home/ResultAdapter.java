@@ -28,9 +28,11 @@ import java.util.List;
 public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultVH> {
     Context context;
     private List<Appointment> appointments;
+    private OnInvitationCallback callback;
 
-    public ResultAdapter(Context context) {
+    public ResultAdapter(Context context, OnInvitationCallback callback) {
         this.context = context;
+        this.callback = callback;
     }
 
     @NonNull
@@ -61,6 +63,9 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultVH> 
                     profilePhotoResources.recycle();
                 }
             }
+            holder.mTvInvitation.setOnClickListener(v-> {
+                if (callback != null) callback.callback(holder.mTvInvitation, current);
+            });
         } else {
             // Covers the case of data not being ready yet.
             holder.mTvName.setText("No Appointment");
@@ -92,6 +97,10 @@ public class ResultAdapter extends RecyclerView.Adapter<ResultAdapter.ResultVH> 
             mTvDesc = itemView.findViewById(R.id.mTvDesc);
             mTvInvitation = itemView.findViewById(R.id.mTvInvitation);
         }
+    }
+
+    public interface OnInvitationCallback {
+        void callback(View view, Appointment appointment);
     }
 
 }
